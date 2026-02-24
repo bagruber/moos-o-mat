@@ -11,36 +11,30 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html,body,#root{height:100%;}
     body{font-family:'Source Sans 3',sans-serif;background:#F5F2EB;}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
     @keyframes barGrow{from{width:0}to{}}
-    @keyframes scaleIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
     @keyframes expandIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-    .fu{animation:fadeUp 0.55s ease both}
-    .fu1{animation-delay:.08s}.fu2{animation-delay:.20s}.fu3{animation-delay:.33s}.fu4{animation-delay:.46s}.fu5{animation-delay:.58s}
-    .btn-primary{transition:background .18s,transform .15s,box-shadow .18s}
-    .btn-primary:hover{background:#8B0D17!important;transform:translateY(-2px);box-shadow:0 8px 24px rgba(140,13,23,.3)!important}
-    .btn-primary:active{transform:translateY(0)!important}
-    .btn-ghost{transition:background .15s}
-    .btn-ghost:hover{background:#E2DDD4!important}
-    .btn-answer{transition:transform .12s,box-shadow .12s;cursor:pointer}
-    .btn-answer:hover{transform:translateY(-3px)!important}
-    .btn-answer:active{transform:translateY(0)!important}
-    .gewicht-item{transition:background .15s,border-color .15s;cursor:pointer}
-    .gewicht-item:hover{background:#F0EDE4!important}
-    .ergebnis-karte{animation:fadeUp .45s ease both}
-    .karte-header{cursor:pointer;user-select:none;transition:background .15s}
-    .karte-header:hover{background:#FAFAF7!important}
-    .bar-fill{animation:barGrow 1s cubic-bezier(.22,.68,0,1.2) both}
-    .overlay{animation:fadeIn .2s ease}
-    .popup-modal{animation:scaleIn .25s ease}
-    .expand-panel{animation:expandIn .25s ease both}
-    .detail-row:not(:last-child){border-bottom:1px solid #EDE9DF}
+    @keyframes scaleIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
+    .wk-fu{animation:fadeUp .5s ease both}
+    .wk-fu1{animation-delay:.06s}.wk-fu2{animation-delay:.16s}.wk-fu3{animation-delay:.28s}.wk-fu4{animation-delay:.40s}.wk-fu5{animation-delay:.52s}
+    .wk-bar{animation:barGrow 1s cubic-bezier(.22,.68,0,1.2) both}
+    .wk-expand{animation:expandIn .22s ease both}
+    .wk-modal{animation:scaleIn .22s ease}
+    .wk-btn-ans{transition:transform .1s,box-shadow .1s;cursor:pointer}
+    .wk-btn-ans:hover{transform:translateY(-3px)!important}
+    .wk-btn-ans:active{transform:translateY(0)!important}
+    .wk-karte-hdr{cursor:pointer;user-select:none;transition:background .15s}
+    .wk-karte-hdr:hover{background:#FAFAF7!important}
+    .wk-karte{animation:fadeUp .4s ease both}
+    .wk-row:not(:last-child){border-bottom:1px solid #EDE9DF}
+    .wk-ghost:hover{background:#E2DDD4!important}
+    .wk-prim:hover{background:#8B0D17!important;transform:translateY(-2px);box-shadow:0 8px 24px rgba(140,13,23,.3)!important}
+    .wk-gwt:hover{background:#F0EDE4!important}
     ::-webkit-scrollbar{width:5px}
     ::-webkit-scrollbar-track{background:#EDE9DF;border-radius:99px}
     ::-webkit-scrollbar-thumb{background:#C8B89A;border-radius:99px}
@@ -49,7 +43,6 @@
 <body>
 <div id="root"></div>
 <script type="text/babel">
-const { useState, useMemo, useCallback } = React;
 
 const FRAGEN = [
   { id:"q1",  kategorie:"Verkehr & Mobilität",           text:"Soll die Stadt Moosburg in der Innenstadt verkehrsberuhigte Bereiche schaffen?" },
@@ -83,7 +76,7 @@ const FRAGEN = [
   { id:"q29", kategorie:"Kultur & Gesellschaft",         text:"Soll die Stadt Moosburg sich für den Erhalt der Stalag-Baracken und die Schaffung eines Dokumentationszentrums einsetzen?" },
   { id:"q30", kategorie:"Kultur & Gesellschaft",         text:"Sollen am Rathaus der Stadt Moosburg andere Flaggen als nur die der Stadt Moosburg oder des Freistaates Bayern gehisst werden dürfen, wenn der Stadtrat dies beschließt?" },
   { id:"q31", kategorie:"Klima & Umwelt",                text:"Soll die Stadt Moosburg wieder Förderprogramme für Klimaschutzmaßnahmen auflegen?" },
-  { id:"q32", kategorie:"Freizeit & Sport",              text:"Soll die Stadt Moosburg den verfallenen Fahrradpark als modernen „Dirtpark" erneuern?" },
+  { id:"q32", kategorie:"Freizeit & Sport",              text:"Soll die Stadt Moosburg den verfallenen Fahrradpark als modernen \u201eDirtpark\u201c erneuern?" },
   { id:"q33", kategorie:"Stadtentwicklung & Bauen",      text:"Soll die Stadt Moosburg das Bahnhofsgebäude abreißen und durch einen kostengünstigen Containerbau ersetzen?" },
   { id:"q34", kategorie:"Stadtentwicklung & Bauen",      text:"Soll die Stadt Moosburg sich bemühen, das Bahnhofsgebäude wieder zu verkaufen?" },
   { id:"q35", kategorie:"Demokratie & Beteiligung",      text:"Soll die kommunale Mitbestimmung in Form von Bürgerräten, Umfragen und Onlinesprechstunden weiter intensiviert werden?" },
@@ -94,12 +87,12 @@ const PARTEIEN = [
   {
     id:"csu", name:"CSU", farbe:"#0088CC", teilnehmend:true,
     antworten:{q1:"ja",q2:"nein",q3:"ja",q4:"neutral",q5:"ja",q6:"nein",q7:"ja",q8:"neutral",q9:"nein",q10:"ja",q11:"ja",q12:"neutral",q13:"nein",q14:"ja",q15:"ja",q16:"ja",q17:"neutral",q18:"ja",q19:"nein",q20:"ja",q21:"neutral",q22:"neutral",q23:"neutral",q24:"ja",q25:"neutral",q26:"neutral",q27:"neutral",q28:"ja",q29:"ja",q30:"nein",q31:"ja",q32:"ja",q33:"nein",q34:"nein",q35:"ja",q36:"nein"},
-    begruendungen:{q1:null,q2:"Mehr Kontrollen, mehr Aufklärung, bessere Markierung der Parkplätze für Elterntaxis.",q3:"Wo sinnvoll / nach Bedarf, z. B. bei Schulen und Kindertageseinrichtungen.",q4:"Nach Prüfung und Abwägung von Kosten/Nutzen.",q5:"Auf dem Gelände \"Alte Polizei\" → ausreichende zentrumsnahe Parkplätze, um die Attraktivität der Innenstadt zu erhöhen.",q6:"Kunden der Innenstadt nicht durch zu hohe Parkgebühren abschrecken.",q7:null,q8:"Nach Prüfung und Abwägung von Kosten/Nutzen.",q9:null,q10:null,q11:null,q12:"Bei Realisierung eines Parkhauses am Gelände \"Alte Polizei\" vorstellbar (Ersatz-Stellplätze).",q13:"Zuzug auf verträgliches Maß begrenzen.",q14:"Gewerbe ja / Zuzug auf verträgliches Maß.",q15:null,q16:null,q17:null,q18:"Um die Wirtschaft zu stärken und mehr Gewerbe in Moosburg anzusiedeln.",q19:null,q20:"Wirtschaftsförderer u. a. auf Antrag der CSU Moosburg beschlossen / als Kümmerer der Moosburger Firmen und Gewerbetreibenden, für Leerstandsmanagement und Firmenansiedlungen (Arbeitsplätze).",q21:"Marketing und Events durch Marketing eG / Wirtschaftsförderung durch Stadt Moosburg.",q22:"Nicht regelmäßig – Abwägung bei jeder Gebührenerhöhung notwendig.",q23:"Stärkung der Schülerlotsen / sichere Gestaltung der Schulwege.",q24:null,q25:"An Schulen.",q26:"Rederecht bei Themen des Jugendparlaments.",q27:"Falls Bürgerumfrage sich für den Christkindlmarkt auf dem Plan entscheidet, wären neue Buden notwendig.",q28:"Auf bestehendem Friedhof.",q29:null,q30:null,q31:"Im Rahmen der finanziellen Möglichkeiten.",q32:"Im Rahmen der finanziellen Möglichkeiten.",q33:null,q34:"Sanierung/Betrieb durch Investor.",q35:null,q36:"Prüfung, ob in den Wintermonaten mehr Parkplätze angeboten werden können."},
+    begruendungen:{q1:null,q2:"Mehr Kontrollen, mehr Aufklärung, bessere Markierung der Parkplätze für Elterntaxis.",q3:"Wo sinnvoll / nach Bedarf, z. B. bei Schulen und Kindertageseinrichtungen.",q4:"Nach Prüfung und Abwägung von Kosten/Nutzen.",q5:'Auf dem Gelände "Alte Polizei" → ausreichende zentrumsnahe Parkplätze, um die Attraktivität der Innenstadt zu erhöhen.',q6:"Kunden der Innenstadt nicht durch zu hohe Parkgebühren abschrecken.",q7:null,q8:"Nach Prüfung und Abwägung von Kosten/Nutzen.",q9:null,q10:null,q11:null,q12:'Bei Realisierung eines Parkhauses am Gelände "Alte Polizei" vorstellbar (Ersatz-Stellplätze).',q13:"Zuzug auf verträgliches Maß begrenzen.",q14:"Gewerbe ja / Zuzug auf verträgliches Maß.",q15:null,q16:null,q17:null,q18:"Um die Wirtschaft zu stärken und mehr Gewerbe in Moosburg anzusiedeln.",q19:null,q20:"Wirtschaftsförderer u. a. auf Antrag der CSU Moosburg beschlossen / als Kümmerer der Moosburger Firmen und Gewerbetreibenden, für Leerstandsmanagement und Firmenansiedlungen (Arbeitsplätze).",q21:"Marketing und Events durch Marketing eG / Wirtschaftsförderung durch Stadt Moosburg.",q22:"Nicht regelmäßig – Abwägung bei jeder Gebührenerhöhung notwendig.",q23:"Stärkung der Schülerlotsen / sichere Gestaltung der Schulwege.",q24:null,q25:"An Schulen.",q26:"Rederecht bei Themen des Jugendparlaments.",q27:"Falls Bürgerumfrage sich für den Christkindlmarkt auf dem Plan entscheidet, wären neue Buden notwendig.",q28:"Auf bestehendem Friedhof.",q29:null,q30:null,q31:"Im Rahmen der finanziellen Möglichkeiten.",q32:"Im Rahmen der finanziellen Möglichkeiten.",q33:null,q34:"Sanierung/Betrieb durch Investor.",q35:null,q36:"Prüfung, ob in den Wintermonaten mehr Parkplätze angeboten werden können."},
   },
   {
     id:"fw", name:"Freie Wähler", farbe:"#FF6000", teilnehmend:true,
     antworten:{q1:"ja",q2:"nein",q3:"nein",q4:"ja",q5:"nein",q6:"nein",q7:"ja",q8:"nein",q9:"ja",q10:"ja",q11:"neutral",q12:"nein",q13:"nein",q14:"ja",q15:"nein",q16:"ja",q17:"ja",q18:"ja",q19:"nein",q20:"nein",q21:"ja",q22:"ja",q23:"nein",q24:"ja",q25:"nein",q26:"ja",q27:"ja",q28:"ja",q29:"ja",q30:"nein",q31:"nein",q32:"ja",q33:"neutral",q34:"nein",q35:"ja",q36:"nein"},
-    begruendungen:{q1:"Wir möchten eine temporäre Fußgängerzone im Bereich Herrnstraße / Stadtplatz errichten. Zur Belebung der Innenstadt dann auch Marktstände und Veranstaltungen in diesem Bereich.",q2:"Eine Einweg-Regelung löst das Problem der sogenannten Eltern-Taxis nicht.",q3:null,q4:"Im Innenstadtbereich besteht ein Parksuchverkehr. Durch Einführung einer digitalen Lösung wollen wir diesen reduzieren.",q5:null,q6:null,q7:"Wir wollen die auswärtigen Kunden, die in Moosburg einkaufen oder was zu erledigen haben, in unserer Stadt haben. Es gilt den Ortsdurchgangsverkehr zu reduzieren.",q8:"Wir wollen nicht mehr Verkehr nachts und am Wochenende. Die Frage ist vermutlich missverständlich.",q9:"Wir wollen einen Live-Bürgerservice etablieren.",q10:null,q11:null,q12:"Durch Infrastrukturmaßnahmen Innenstadt schöner machen, einzelne Parkplätze verlagern.",q13:"Baugebiet ja oder nein hat direkte Auswirkung. Angebot und Nachfrage haben Auswirkungen auf die Preise am Wohnungsmarkt. Weiterhin aber auch Auswirkungen auf Infrastruktur.",q14:null,q15:null,q16:null,q17:null,q18:null,q19:"Die Frage würde sich dann stellen, wenn Gewerbegebiete vorhanden sind.",q20:null,q21:null,q22:"Um keine Einrichtungen schließen zu müssen, sollten die Gebühren regelmäßig, also alle 2–3 Jahre, orientiert an der Inflationsrate erhöht werden.",q23:null,q24:null,q25:null,q26:null,q27:null,q28:null,q29:null,q30:null,q31:null,q32:"Unter Verantwortung und Trägerschaft eines Vereins.",q33:null,q34:null,q35:null,q36:null},
+    begruendungen:{q1:"Wir möchten eine temporäre Fußgängerzone im Bereich Herrnstraße / Stadtplatz errichten. Zur Belebung der Innenstadt dann auch Marktstände und Veranstaltungen in diesem Bereich.",q2:"Eine Einweg-Regelung löst das Problem der sogenannten Eltern-Taxis nicht.",q3:null,q4:"Im Innenstadtbereich besteht ein Parksuchverkehr. Durch Einführung einer digitalen Lösung wollen wir diesen reduzieren.",q5:null,q6:null,q7:"Wir wollen die auswärtigen Kunden, die in Moosburg einkaufen oder was zu erledigen haben, in unserer Stadt haben. Es gilt den Ortsdurchgangsverkehr zu reduzieren.",q8:"Wir wollen nicht mehr Verkehr nachts und am Wochenende. Die Frage ist vermutlich missverständlich.",q9:"Wir wollen einen Live-Bürgerservice etablieren.",q10:null,q11:null,q12:"Durch Infrastrukturmaßnahmen Innenstadt schöner machen, einzelne Parkplätze verlagern.",q13:"Baugebiet ja oder nein hat direkte Auswirkung. Angebot und Nachfrage haben Auswirkungen auf die Preise am Wohnungsmarkt.",q14:null,q15:null,q16:null,q17:null,q18:null,q19:"Die Frage würde sich dann stellen, wenn Gewerbegebiete vorhanden sind.",q20:null,q21:null,q22:"Um keine Einrichtungen schließen zu müssen, sollten die Gebühren regelmäßig, also alle 2–3 Jahre, orientiert an der Inflationsrate erhöht werden.",q23:null,q24:null,q25:null,q26:null,q27:null,q28:null,q29:null,q30:null,q31:null,q32:"Unter Verantwortung und Trägerschaft eines Vereins.",q33:null,q34:null,q35:null,q36:null},
   },
   {
     id:"afd", name:"AfD", farbe:"#009EE0", teilnehmend:false,
@@ -109,17 +102,17 @@ const PARTEIEN = [
   {
     id:"gruene", name:"Grüne", farbe:"#46962B", teilnehmend:true,
     antworten:{q1:"ja",q2:"nein",q3:"ja",q4:"ja",q5:"nein",q6:"neutral",q7:"ja",q8:"ja",q9:"ja",q10:"ja",q11:"neutral",q12:"nein",q13:"nein",q14:"ja",q15:"ja",q16:"ja",q17:"ja",q18:"nein",q19:"nein",q20:"ja",q21:"neutral",q22:"neutral",q23:"ja",q24:"ja",q25:"ja",q26:"ja",q27:"nein",q28:"ja",q29:"ja",q30:"ja",q31:"ja",q32:"ja",q33:"nein",q34:"nein",q35:"ja",q36:"nein"},
-    begruendungen:{q1:"Wir setzen uns ein für eine lebendige Innenstadt – mit Verkehrsberuhigung UND Aufenthaltsqualität. Mit Sitz- und Spielgelegenheiten, Stadtbäumen, barrierefreien Wegen, mehr Platz für Außengastronomie und einer vielfältigen Geschäftswelt schaffen wir einen attraktiven Ort zum Verweilen.",q2:"Eine zeitlich befristete Einfahrtsregelung wie in der Albinstraße ist die effektivere Maßnahme. Für AnwohnerInnen, Pflegedienste und Lieferverkehr werden Ausnahmegenehmigungen ausgestellt.",q3:"Mit unserem Antrag wurde das letzte große Wohngebiet in der Neustadt zur Tempo-30-Zone – weitere Straßen müssen folgen.",q4:"Ca. 30 % des innerstädtischen Verkehrs sind Parkplatzsuchverkehr. Dieser kann durch ein digitales Parkraummanagement stark reduziert werden.",q5:"Verkehrsuntersuchungen zeigten, dass nach der Plansanierung ausreichend innenstadtnahe Parkplätze vorhanden sind. Der Flex verbessert die Erreichbarkeit zusätzlich.",q6:"Derzeit nicht nötig. Allerdings sollten geltende Regelungen, z. B. Parkverbot auf Fußwegen, stärker kontrolliert werden.",q7:"Eine weitere Verkehrsreduktion in der Innenstadt schafft Aufenthalts- und Lebensqualität. Die Innenstadt muss fußgängerfreundlicher gestaltet werden.",q8:"Mit der nächsten Fortschreibung des Flex regen wir an, die Fahrtzeit an Wochenenden/Feiertagen deutlich zu verlängern (bis 0 oder 1 Uhr).",q9:"Im Rahmen der rechtlichen Möglichkeiten (Datenschutz) werden wir dies möglichst schnell umsetzen.",q10:"In vielen Kommunen ist dies bereits Standard. Mit einem Grünen Bürgermeister wird dies zeitnah eingeführt.",q11:null,q12:"Der eine oder andere Parkplatz in der Innenstadt sollte aufgelöst werden, um Platz für Stadtmöblierung, Bäume und attraktive Außengastronomie zu schaffen.",q13:"Wir setzen uns für maßvolles Wachstum ein. Baugebiete sollen nur ausgewiesen werden, wenn die Stadt zum größten Teil Eigentümerin der Flächen ist.",q14:"Wir brauchen Degernpoint 3 für Erweiterung und Ansiedlung größerer Gewerbebetriebe. Ein Gewerbegebiet Unterreit direkt an den Amperauen lehnen wir ab.",q15:"Nachhaltige Mobilitätsangebote (Sharing-Stationen mit E-Autos, Lastenrädern, E-Bikes, Rollern, ÖPNV-Karten) sind wichtig für umweltfreundliche Mobilität.",q16:"Mit uns gibt es keine Bebauung auf der Schloss-Asch-Wiese. Wir erhalten unsere grüne Lunge.",q17:"Flächenversiegelung ist eines der größten Umweltprobleme. Wir brauchen B-Pläne auch zur Steuerung der Nachverdichtung.",q18:"Wir sehen die zukünftige Gewerbeentwicklung in Degernpoint 3. Wie bei der Wohnbebauung soll dies auf städtischen Flächen verwirklicht werden.",q19:"Wir setzen auf verlässliche Finanzpolitik, um den Stadthaushalt zu entlasten und Planungssicherheit für lokale Unternehmen zu gewährleisten.",q20:"Wir planen eine Wirtschaftseinheit direkt beim Bürgermeister – bestehend aus Wirtschaftsförderung, Marketing und Öffentlichkeitsarbeit.",q21:"Zumindest eine Marketingstelle soll direkt beim Bürgermeister angesiedelt werden. In Zusammenarbeit mit der Marketing eG soll das Stadtmarketing neu aufgestellt werden.",q22:"Städtische Gebühren sollen im Rahmen der Inflation maßvoll angepasst werden, mehr nicht.",q23:"Die Grünen haben bereits 2022 einen Antrag für Schulwegpläne gestellt (durch Stadtratsmehrheit abgelehnt).",q24:"Die Grünen hatten dies auf Kreisebene beantragt. Wir setzen uns für geänderte rechtliche Rahmenbedingungen ein.",q25:"Menstruationsprodukte in öffentlichen Toiletten fördern Gleichberechtigung und verhindern Nachteile durch Periodenarmut.",q26:"Grundsätzlich muss die Zusammenarbeit mit dem Jugendparlament und die Mitwirkungsmöglichkeiten verbessert werden.",q27:"Wir sehen den Christkindlmarkt am Zehentstadel gut aufgehoben. Dies spart Geld, das wir in anderen Bereichen dringend brauchen.",q28:"Für viele Menschen ist das ein großes Anliegen, dem wir unbedingt gerecht werden müssen.",q29:"Eine gelebte Erinnerungskultur bewahrt uns vor den Fehlern der Vergangenheit und macht Geschichte begreifbar.",q30:"In begründeten Fällen sollte dies möglich sein.",q31:"Die Stadt muss Bürger*innen bei der Energiewende unterstützen. Maßgeschneiderte Förderprogramme werden mit einem grünen Bürgermeister wieder eingeführt.",q32:"Der bestehende Park ist unsicher. Die Anlage ist eine sinnvolle Erweiterung des Angebots für viele Altersgruppen.",q33:"Eine Containerlösung wird dem Standort nicht gerecht. Ein saniertes Gebäude ist hochwertiger.",q34:"Mit einem Verkauf sind die Kaufkosten nicht mehr erzielbar. Außerdem gibt die Stadt dadurch Handlungsmöglichkeiten aus der Hand.",q35:"Unbedingt – ein grüner Bürgermeister wird dies einführen.",q36:"Es stehen ausreichend Parkplätze in fußläufiger Umgebung zur Verfügung. Die Planfläche wird dringend für mehr Aufenthaltsqualität benötigt."},
+    begruendungen:{q1:"Wir setzen uns ein für eine lebendige Innenstadt – mit Verkehrsberuhigung UND Aufenthaltsqualität. Mit Sitz- und Spielgelegenheiten, Stadtbäumen, barrierefreien Wegen, mehr Platz für Außengastronomie.",q2:"Eine zeitlich befristete Einfahrtsregelung wie in der Albinstraße ist die effektivere Maßnahme. Für AnwohnerInnen, Pflegedienste und Lieferverkehr werden Ausnahmegenehmigungen ausgestellt.",q3:"Mit unserem Antrag wurde das letzte große Wohngebiet in der Neustadt zur Tempo-30-Zone – weitere Straßen müssen folgen.",q4:"Ca. 30 % des innerstädtischen Verkehrs sind Parkplatzsuchverkehr. Dieser kann durch ein digitales Parkraummanagement stark reduziert werden.",q5:"Verkehrsuntersuchungen zeigten, dass nach der Plansanierung ausreichend innenstadtnahe Parkplätze vorhanden sind. Der Flex verbessert die Erreichbarkeit zusätzlich.",q6:"Derzeit nicht nötig. Allerdings sollten geltende Regelungen, z. B. Parkverbot auf Fußwegen, stärker kontrolliert werden.",q7:"Eine weitere Verkehrsreduktion in der Innenstadt schafft Aufenthalts- und Lebensqualität. Die Innenstadt muss fußgängerfreundlicher gestaltet werden.",q8:"Mit der nächsten Fortschreibung des Flex regen wir an, die Fahrtzeit an Wochenenden/Feiertagen deutlich zu verlängern (bis 0 oder 1 Uhr).",q9:"Im Rahmen der rechtlichen Möglichkeiten (Datenschutz) werden wir dies möglichst schnell umsetzen.",q10:"In vielen Kommunen ist dies bereits Standard. Mit einem Grünen Bürgermeister wird dies zeitnah eingeführt.",q11:null,q12:"Der eine oder andere Parkplatz in der Innenstadt sollte aufgelöst werden, um Platz für Stadtmöblierung, Bäume und attraktive Außengastronomie zu schaffen.",q13:"Wir setzen uns für maßvolles Wachstum ein. Baugebiete sollen nur ausgewiesen werden, wenn die Stadt zum größten Teil Eigentümerin der Flächen ist.",q14:"Wir brauchen Degernpoint 3 für Erweiterung und Ansiedlung größerer Gewerbebetriebe. Ein Gewerbegebiet Unterreit direkt an den Amperauen lehnen wir ab.",q15:"Nachhaltige Mobilitätsangebote (Sharing-Stationen mit E-Autos, Lastenrädern, E-Bikes, Rollern, ÖPNV-Karten) sind wichtig für umweltfreundliche Mobilität.",q16:"Mit uns gibt es keine Bebauung auf der Schloss-Asch-Wiese. Wir erhalten unsere grüne Lunge.",q17:"Flächenversiegelung ist eines der größten Umweltprobleme. Wir brauchen B-Pläne auch zur Steuerung der Nachverdichtung.",q18:"Wir sehen die zukünftige Gewerbeentwicklung in Degernpoint 3. Wie bei der Wohnbebauung soll dies auf städtischen Flächen verwirklicht werden.",q19:"Wir setzen auf verlässliche Finanzpolitik, um den Stadthaushalt zu entlasten und Planungssicherheit für lokale Unternehmen zu gewährleisten.",q20:"Wir planen eine Wirtschaftseinheit direkt beim Bürgermeister – bestehend aus Wirtschaftsförderung, Marketing und Öffentlichkeitsarbeit.",q21:"Zumindest eine Marketingstelle soll direkt beim Bürgermeister angesiedelt werden. In Zusammenarbeit mit der Marketing eG soll das Stadtmarketing neu aufgestellt werden.",q22:"Städtische Gebühren sollen im Rahmen der Inflation maßvoll angepasst werden, mehr nicht.",q23:"Die Grünen haben bereits 2022 einen Antrag für Schulwegpläne gestellt (durch Stadtratsmehrheit abgelehnt).",q24:"Die Grünen hatten dies auf Kreisebene beantragt. Wir setzen uns für geänderte rechtliche Rahmenbedingungen ein.",q25:"Menstruationsprodukte in öffentlichen Toiletten fördern Gleichberechtigung und verhindern Nachteile durch Periodenarmut.",q26:"Grundsätzlich muss die Zusammenarbeit mit dem Jugendparlament und die Mitwirkungsmöglichkeiten verbessert werden.",q27:"Wir sehen den Christkindlmarkt am Zehentstadel gut aufgehoben. Dies spart Geld, das wir in anderen Bereichen dringend brauchen.",q28:"Für viele Menschen ist das ein großes Anliegen, dem wir unbedingt gerecht werden müssen.",q29:"Eine gelebte Erinnerungskultur bewahrt uns vor den Fehlern der Vergangenheit und macht Geschichte begreifbar.",q30:"In begründeten Fällen sollte dies möglich sein.",q31:"Die Stadt muss Bürger*innen bei der Energiewende unterstützen. Maßgeschneiderte Förderprogramme werden mit einem grünen Bürgermeister wieder eingeführt.",q32:"Der bestehende Park ist unsicher. Die Anlage ist eine sinnvolle Erweiterung des Angebots für viele Altersgruppen.",q33:"Eine Containerlösung wird dem Standort nicht gerecht. Ein saniertes Gebäude ist hochwertiger.",q34:"Mit einem Verkauf sind die Kaufkosten nicht mehr erzielbar. Außerdem gibt die Stadt dadurch Handlungsmöglichkeiten aus der Hand.",q35:"Unbedingt – ein grüner Bürgermeister wird dies einführen.",q36:"Es stehen ausreichend Parkplätze in fußläufiger Umgebung zur Verfügung. Die Planfläche wird dringend für mehr Aufenthaltsqualität benötigt."},
   },
   {
     id:"spd", name:"SPD", farbe:"#E3000F", teilnehmend:true,
     antworten:{q1:"ja",q2:"neutral",q3:"ja",q4:"neutral",q5:"nein",q6:"nein",q7:"ja",q8:"ja",q9:"neutral",q10:"ja",q11:"neutral",q12:"nein",q13:"nein",q14:"ja",q15:"ja",q16:"ja",q17:"ja",q18:"ja",q19:"neutral",q20:"ja",q21:"ja",q22:"ja",q23:"ja",q24:"ja",q25:"ja",q26:"ja",q27:"neutral",q28:"ja",q29:"ja",q30:"ja",q31:"ja",q32:"ja",q33:"ja",q34:"nein",q35:"ja",q36:"nein"},
-    begruendungen:{q1:"Die Innenstadt und damit das Gewerbe profitiert mehr von einem Einkaufs-Erlebnis als von einem Parkplatz direkt vor der Tür.",q2:"Ein Verkehrsversuch, wie ursprünglich vom Bauausschuss beschlossen, würde belastbare Erfahrungswerte bringen. Wir sind für eine starke Einbeziehung der Anlieger.",q3:"Moosburg hat als gewachsene Stadt viele auch kleinere Straßen. Es ist dafür zu sorgen, dass alle Verkehrsteilnehmer sich sicher bewegen können.",q4:"Kosten und Aufwand stehen nach unserem Wissen in keinem sinnvollen Verhältnis zum Nutzen. Sollte der Zeitpunkt kommen, ist es als potentielle Lösung genauer zu betrachten.",q5:"Wir denken, dass im Umgriff der Westumfahrung Möglichkeiten für sanfte Parkraumentwicklung gegeben ist, die z. B. mit einem Shuttleservice angebunden werden kann.",q6:"Eine Parkraumbewirtschaftung kann das Stadtsäckel nicht nachhaltig füllen. Das gelingt nur über eine höhere Attraktivität der Stadt.",q7:"Die SPD hat hierzu einen Antrag vorgelegt, der alle Verkehrsteilnehmer und ihre Bedarfe an Fläche, Infrastruktur und Sicherheit berücksichtigt.",q8:"Mobilität und Erreichbarkeit sind die Schlüssel für sichere Teilhabe an der Gesellschaft – in jedem Alter und jeder Lebenssituation.",q9:"Eine weitere Digitalisierung der Verwaltung ist wichtig. Wir sehen hier aber andere Prioritäten, wobei Videotermine mittelfristig die logische Folge sind.",q10:"Erster Schritt sollte sein, die bereits öffentlich verfügbaren Unterlagen besser nutzbar zu machen.",q11:"Kosten, Nutzen und rechtliche Belange müssen in Einklang gebracht werden.",q12:"Die Parkplätze in der Innenstadt sind wichtig. ABER: Man könnte mit kleinem Mitteleinsatz die Parkflächen anders anordnen.",q13:"Organisches Wachstum ist für unsere Stadt wichtig. Aber die Vorgehensweise der Ausweisung und die Betrachtung der Nachfolgelasten müssen sich ändern.",q14:"Ja, aber in vernünftigen Bahnen. Eine gesunde Mischung aus Wohnbebauung, kleinen und mittleren Gewerbebetrieben sowie Industrie sorgt für einen lebendigen Stadtcharakter.",q15:"Dies sollte bei allen Vorhaben die Grundlage sein und beinhaltet, dass die Stadt das Projekt als Berater für private Bauherren begleitet.",q16:"Die Aschwiese ist mit ihrer Lage ein wertvolles Gut für die Frischluftversorgung der Stadt.",q17:"Jedes größere Regenereignis zeigt, dass Versiegelung nicht die Lösung sein kann. Schwammstadtkonzepte sind auf Machbarkeit zu prüfen.",q18:"Unsere Stadt hat in diesem Bereich Nachholbedarf, der sich direkt auf die Stadtfinanzen und damit die Handlungsfähigkeit auswirkt.",q19:"Diese Entscheidungen sind gemeinsam mit den Gemeinden der Region zu treffen, da uns eine gegenseitige Kannibalisierung am wenigsten nutzt.",q20:"Ein hauptamtlicher Ansprechpartner für bestehendes und zuziehendes Gewerbe im Rathaus ist ein unmissverständliches Zeichen.",q21:"Hier ist die Klärung des Arbeitsauftrages für die MoMa längst überfällig. Wir sehen die Entwicklung in Richtung Tourismus und breitgefächertes Veranstaltungsmarketing als Chance.",q22:"Nicht um den Haushalt zu entlasten, sondern als regelmäßige und moderate Anpassung an die wirtschaftlichen Möglichkeiten der Bürger.",q23:"Auch wenn dieses Vorhaben erst einmal Kosten verursacht – der Nutzen ist insbesondere bei späteren Planungen unbestritten.",q24:"Sicherheit geht vor. Auch wenn gesetzliche Vorgaben erfüllt sind, darf dies nicht die Grenze des Handelns sein.",q25:"Ja, denn manchmal besteht Gleichberechtigung aus kleinen Schritten, die man(n) einfach gehen sollte.",q26:"Wir haben das JUP als kompetenten Ansprechpartner kennen und schätzen gelernt.",q27:"Wir finden beide Standorte attraktiv und sprechen uns für eine Bürgerbefragung aus.",q28:"Auch der letzte Gang sollte die Möglichkeit eröffnen, mit seiner Heimatstadt verbunden zu bleiben.",q29:"Wir sehen in unserer Stadtgeschichte einen wertvollen Schatz, der touristisch gehoben werden sollte.",q30:"Das Rathaus ist Mittelpunkt und Zeichen der städtischen Gemeinschaft.",q31:"Klimapolitik ist gelebte Politik, von der wir alle profitieren.",q32:"Wir glauben, dass der Dirtpark an der Amper eine gute Idee ist.",q33:"Zustand und Lage des Gebäudes (Bausubstanz, Asbest, Nähe zum Gleis) legen nahe, den Bestand abzureißen und zu ersetzen.",q34:"Wenn wir den Bahnhof zum Mittelpunkt des ÖPNV machen wollen, brauchen wir ihn in eigener Hand.",q35:"Eine alte Forderung der SPD. Die technischen Mittel lassen einen sinnvollen Einsatz direkter Demokratie endlich näher rücken.",q36:"Nein, einfach nein! Hier soll städtisches Leben stattfinden."},
+    begruendungen:{q1:"Die Innenstadt und damit das Gewerbe profitiert mehr von einem Einkaufs-Erlebnis als von einem Parkplatz direkt vor der Tür.",q2:"Ein Verkehrsversuch würde belastbare Erfahrungswerte bringen. Wir sind für eine starke Einbeziehung der Anlieger.",q3:"Moosburg hat als gewachsene Stadt viele auch kleinere Straßen. Es ist dafür zu sorgen, dass alle Verkehrsteilnehmer sich sicher bewegen können.",q4:"Kosten und Aufwand stehen nach unserem Wissen in keinem sinnvollen Verhältnis zum Nutzen. Sollte der Zeitpunkt kommen, ist es als potentielle Lösung genauer zu betrachten.",q5:"Wir denken, dass im Umgriff der Westumfahrung Möglichkeiten für sanfte Parkraumentwicklung gegeben ist, die z. B. mit einem Shuttleservice angebunden werden kann.",q6:"Eine Parkraumbewirtschaftung kann das Stadtsäckel nicht nachhaltig füllen. Das gelingt nur über eine höhere Attraktivität der Stadt.",q7:"Die SPD hat hierzu einen Antrag vorgelegt, der alle Verkehrsteilnehmer und ihre Bedarfe an Fläche, Infrastruktur und Sicherheit berücksichtigt.",q8:"Mobilität und Erreichbarkeit sind die Schlüssel für sichere Teilhabe an der Gesellschaft – in jedem Alter und jeder Lebenssituation.",q9:"Eine weitere Digitalisierung der Verwaltung ist wichtig. Wir sehen hier aber andere Prioritäten, wobei Videotermine mittelfristig die logische Folge sind.",q10:"Erster Schritt sollte sein, die bereits öffentlich verfügbaren Unterlagen besser nutzbar zu machen.",q11:"Kosten, Nutzen und rechtliche Belange müssen in Einklang gebracht werden.",q12:"Die Parkplätze in der Innenstadt sind wichtig. ABER: Man könnte mit kleinem Mitteleinsatz die Parkflächen anders anordnen.",q13:"Organisches Wachstum ist für unsere Stadt wichtig. Aber die Vorgehensweise der Ausweisung und die Betrachtung der Nachfolgelasten müssen sich ändern.",q14:"Ja, aber in vernünftigen Bahnen. Eine gesunde Mischung aus Wohnbebauung, kleinen und mittleren Gewerbebetrieben sowie Industrie sorgt für einen lebendigen Stadtcharakter.",q15:"Dies sollte bei allen Vorhaben die Grundlage sein und beinhaltet, dass die Stadt das Projekt als Berater für private Bauherren begleitet.",q16:"Die Aschwiese ist mit ihrer Lage ein wertvolles Gut für die Frischluftversorgung der Stadt.",q17:"Jedes größere Regenereignis zeigt, dass Versiegelung nicht die Lösung sein kann. Schwammstadtkonzepte sind auf Machbarkeit zu prüfen.",q18:"Unsere Stadt hat in diesem Bereich Nachholbedarf, der sich direkt auf die Stadtfinanzen und damit die Handlungsfähigkeit auswirkt.",q19:"Diese Entscheidungen sind gemeinsam mit den Gemeinden der Region zu treffen, da uns eine gegenseitige Kannibalisierung am wenigsten nutzt.",q20:"Ein hauptamtlicher Ansprechpartner für bestehendes und zuziehendes Gewerbe im Rathaus ist ein unmissverständliches Zeichen.",q21:"Hier ist die Klärung des Arbeitsauftrages für die MoMa längst überfällig. Wir sehen die Entwicklung in Richtung Tourismus und breitgefächertes Veranstaltungsmarketing als Chance.",q22:"Nicht um den Haushalt zu entlasten, sondern als regelmäßige und moderate Anpassung an die wirtschaftlichen Möglichkeiten der Bürger.",q23:"Auch wenn dieses Vorhaben erst einmal Kosten verursacht – der Nutzen ist insbesondere bei späteren Planungen unbestritten.",q24:"Sicherheit geht vor. Auch wenn gesetzliche Vorgaben erfüllt sind, darf dies nicht die Grenze des Handelns sein.",q25:"Ja, denn manchmal besteht Gleichberechtigung aus kleinen Schritten, die man(n) einfach gehen sollte.",q26:"Wir haben das JUP als kompetenten Ansprechpartner kennen und schätzen gelernt.",q27:"Wir finden beide Standorte attraktiv und sprechen uns für eine Bürgerbefragung aus.",q28:"Auch der letzte Gang sollte die Möglichkeit eröffnen, mit seiner Heimatstadt verbunden zu bleiben.",q29:"Wir sehen in unserer Stadtgeschichte einen wertvollen Schatz, der touristisch gehoben werden sollte.",q30:"Das Rathaus ist Mittelpunkt und Zeichen der städtischen Gemeinschaft.",q31:"Klimapolitik ist gelebte Politik, von der wir alle profitieren.",q32:"Wir glauben, dass der Dirtpark an der Amper eine gute Idee ist.",q33:"Zustand und Lage des Gebäudes (Bausubstanz, Asbest, Nähe zum Gleis) legen nahe, den Bestand abzureißen und zu ersetzen.",q34:"Wenn wir den Bahnhof zum Mittelpunkt des ÖPNV machen wollen, brauchen wir ihn in eigener Hand.",q35:"Eine alte Forderung der SPD. Die technischen Mittel lassen einen sinnvollen Einsatz direkter Demokratie endlich näher rücken.",q36:"Nein, einfach nein! Hier soll städtisches Leben stattfinden."},
   },
   {
-    id:"fresh", name:"FRESH", farbe:"#00A878", teilnehmend:true,
+    id:"fresh", name:"FRESH", farbe:"#36c9c5", teilnehmend:true,
     antworten:{q1:"ja",q2:"ja",q3:"ja",q4:"ja",q5:"nein",q6:"nein",q7:"ja",q8:"ja",q9:"ja",q10:"ja",q11:"neutral",q12:"nein",q13:"neutral",q14:"neutral",q15:"ja",q16:"ja",q17:"ja",q18:"neutral",q19:"nein",q20:"nein",q21:"neutral",q22:"ja",q23:"nein",q24:"neutral",q25:"ja",q26:"ja",q27:"neutral",q28:"ja",q29:"ja",q30:"ja",q31:"ja",q32:"neutral",q33:"nein",q34:"nein",q35:"ja",q36:"nein"},
-    begruendungen:{q1:"Fresh setzt sich dafür ein, dass die Innenstadt nicht nur verkehrsberuhigt ist, sondern eine Fußgängerzone entsteht. Jedoch kann mit einem verkehrsberuhigten Bereich in der gesamten Innenstadt ein erster Schritt unternommen werden, auf Dauer dieses Ziel zu erreichen.",q2:"Wir sehen bei der aktuellen Straßensituation die Gefahr, dass nicht genügend auf Kinder geachtet werden kann, die dort zwingend die Straßen überqueren müssen. Darüber hinaus kann durch eine entsprechende Regelung auch dafür gesorgt werden, dass sogenannte Elterntaxis weit weniger problematisch diese Stellen erreichen.",q3:"Wir sind für einen sinnvollen Einsatz von jeglichen Geschwindigkeitsreduzierungen, wenn eine Beruhigung des Verkehrs nötig und möglich ist.",q4:"Wir fordern, dass ein städtisches Parkleitsystem eingeführt wird. Somit kann jeder Bürger in dieser Stadt schnell und unkompliziert einsehen, welche Parkplätze in der Stadt noch vorhanden sind.",q5:"Wir sind dafür, dass eher Lösungen gefördert werden sollten, die vorhandenen Parkflächen barrierefrei an die Innenstadt anbinden. Fresh sieht keine vorhandenen Flächen, die in einem solchen Bau preiswert genug verwendet werden können.",q6:"Aktuell fordern wir keine Erhöhung der Parkscheinpreise.",q7:"Fresh setzt sich für die Errichtung einer Fußgängerzone in der Innenstadt ein, beispielsweise der Herrenstraße oder dem Stadtplatz. Damit kann die Lebensqualität in der Innenstadt erheblich aufgewertet werden.",q8:"Fresh setzt sich für längere Betriebszeiten der FLEX-Busse ein.",q9:"Durch das Anbieten von Online-Möglichkeiten sehen wir eine Verbesserung der Barrierefreiheit, die letztendlich allen Bürger*innen zugute kommt.",q10:"Fresh bekennt sich zur Transparenz der Entscheidungen, die öffentlich getroffen werden. Daher befürworten wir eine Ausweitung dieser Informationsmöglichkeit vonseiten der Stadt.",q11:"Uns ist eine hohe Partizipation und Transparenz wichtig, jedoch muss in einem solchen Fall der Datenschutz gewahrt werden, was eine Einstimmigkeit eines solchen Beschlusses voraussetzt.",q12:"Parkflächen sind wichtig, sollten aber niemals über die Bedürfnisse der Menschen vor Ort gestellt werden. Es sind genug gut erreichbare Parkplätze außerhalb der Altstadt vorhanden. Wir wollen keine Parkfläche pauschal erhalten, sondern die, die einen Vorteil vor Ort bieten.",q13:"Es ist schön und wünschenswert, dass unsere Stadt wachsen kann. Allerdings möchten wir davon absehen, pauschal auf eine zukünftige Entwicklung bereits heute zu reagieren. Wichtiger ist es, dass die vorhandenen Gebiete effizient genutzt werden.",q14:"Fresh ist grundsätzlich kein Gegner davon, Baurecht zu schaffen, doch muss abgewägt werden, welche Nutzen damit verfolgt werden. Unsere größte Priorität liegt bei sozialen Unterstützungen im Punkt Wohnungsbau.",q15:"Fresh bekennt sich zum Klimaschutz, deshalb sind wir dafür, dass bei Neubauten auf Nachhaltigkeit geachtet wird.",q16:"Als Grüne Lunge unserer Innenstadt muss sie erhalten bleiben. Als Vorschlag plädieren wir für einen natürlich gehaltenen Park, in dem maximal Wege eingezogen werden sollen.",q17:null,q18:"Wir orientieren uns hier ganz an der Nachfrage und unterstützen alle Ausschreibungen für Gewerbegebiete, wenn deren Umsetzung sinnvoll und nötig ist.",q19:"Wir sehen keine praktikable Möglichkeit, die Gewerbesteuer massiv genug zu senken, ohne große Auswirkungen auf den städtischen Haushalt. Daher sehen wir uns eher in der Pflicht, die Rahmenbedingungen für eine Ansiedlung oder Gründung zu verbessern.",q20:"Ein Wirtschaftsförderer mag kurzfristig Unternehmen anwerben können, jedoch halten wir den langfristigen Nutzen für so gering, dass sich die Kosten nicht rentieren.",q21:"Wir halten eine feste Stelle für sinnvoll, doch wenn die Moosburg Marketing eG diese weiter besetzt, muss die Zusammenarbeit verbessert werden – klarere Zielsetzung und effektiver Einsatz aller finanziellen Mittel.",q22:"Die städtischen Gebühren sollen an die jährliche Inflation gekoppelt werden, um diese auch im Haushalt abbilden zu können.",q23:"Die Sicherheit von Schulkindern ist sehr wichtig. Zu erwarten, dass Kinder nur sicher zur Schule kommen, wenn sie sich an Pläne halten, ist unrealistisch. Die Stadt muss sichere Schulwege durch Verkehrsführung und Kontrolle schaffen.",q24:"Der Transport aller Schüler muss zu jeder Zeit sicher gewährleistet sein, doch solange das erfüllt ist, muss man nicht durch zusätzliche Busse den Verkehr unnötig erschweren.",q25:null,q26:"Demokratie beginnt bereits in jungem Alter. Als Kommune, die das älteste JuPa in Bayern beherbergt, sollte dies der natürliche nächste Schritt sein, um ein gesichertes Recht auf Mitgestaltung zu erhalten.",q27:"Wir sind dafür, dass der neue Plan bestmöglich für das kulturelle Leben genutzt wird. Wenn man, um dieses Ziel zu erreichen, weitere Buden benötigt, werden wir uns dafür einsetzen.",q28:"Fresh setzt sich für die Vielfalt in Moosburg ein. Das beinhaltet natürlich auch das Schaffen von alternativen Bestattungsmöglichkeiten.",q29:"Mit der Erinnerung und dem Verständnis der Vergangenheit haben wir eine besondere Verantwortung, das historische Erbe unserer Stadt zu schützen.",q30:"Die Beschlüsse des Stadtrats sind demokratisch getroffen und verbindlich, daher sollte dies im Einklang des geltenden Rechts möglich gemacht werden.",q31:"Fresh setzt sich für den Klimaschutz ein, der natürlich auch mit Förderungen unterstützt werden muss.",q32:null,q33:"Das Bahnhofsgebäude ist definitiv allen Bürgern in seiner jetzigen Form ein Dorn im Auge, dies würde sich durch einen Container-Ersatz nicht ändern. Wir sehen eine größere Chance in der Renovierung des Bahnhofs.",q34:"Die Stadt hat diesen gekauft, um daraus ein anschauliches Tor zu Moosburg zu schaffen. Deshalb setzen wir uns dafür ein, dass etwas Vernünftiges und Ansehnliches aus dem Gebäude gemacht wird.",q35:"Fresh setzt sich für intensive Partizipation und Transparenz ein und ist für jede Beteiligungsform, die den Bürger*innen mehr Gehör verschafft.",q36:"Der Umbau des Plans wurde als Aufenthaltsfläche konzipiert – sämtliche nicht ausgewiesenen Parkplätze sollen gestrichen und Verstöße hart geahndet werden."},
+    begruendungen:{q1:"Fresh setzt sich dafür ein, dass die Innenstadt nicht nur verkehrsberuhigt ist, sondern eine Fußgängerzone entsteht. Jedoch kann mit einem verkehrsberuhigten Bereich in der gesamten Innenstadt ein erster Schritt unternommen werden.",q2:"Wir sehen bei der aktuellen Straßensituation die Gefahr, dass nicht genügend auf Kinder geachtet werden kann, die dort zwingend die Straßen überqueren müssen.",q3:"Wir sind für einen sinnvollen Einsatz von jeglichen Geschwindigkeitsreduzierungen, wenn eine Beruhigung des Verkehrs nötig und möglich ist.",q4:"Wir fordern, dass ein städtisches Parkleitsystem eingeführt wird. Somit kann jeder Bürger in dieser Stadt schnell und unkompliziert einsehen, welche Parkplätze in der Stadt noch vorhanden sind.",q5:"Wir sind dafür, dass eher Lösungen gefördert werden sollten, die vorhandenen Parkflächen barrierefrei an die Innenstadt anbinden.",q6:"Aktuell fordern wir keine Erhöhung der Parkscheinpreise.",q7:"Fresh setzt sich für die Errichtung einer Fußgängerzone in der Innenstadt ein. Damit kann die Lebensqualität in der Innenstadt erheblich aufgewertet werden.",q8:"Fresh setzt sich für längere Betriebszeiten der FLEX-Busse ein.",q9:"Durch das Anbieten von Online-Möglichkeiten sehen wir eine Verbesserung der Barrierefreiheit, die letztendlich allen Bürger*innen zugute kommt.",q10:"Fresh bekennt sich zur Transparenz der Entscheidungen, die öffentlich getroffen werden. Daher befürworten wir eine Ausweitung dieser Informationsmöglichkeit vonseiten der Stadt.",q11:"Uns ist eine hohe Partizipation und Transparenz wichtig, jedoch muss in einem solchen Fall der Datenschutz gewahrt werden.",q12:"Parkflächen sind wichtig, sollten aber niemals über die Bedürfnisse der Menschen vor Ort gestellt werden. Es sind genug gut erreichbare Parkplätze außerhalb der Altstadt vorhanden.",q13:"Es ist schön und wünschenswert, dass unsere Stadt wachsen kann. Allerdings möchten wir davon absehen, pauschal auf eine zukünftige Entwicklung bereits heute zu reagieren.",q14:"Fresh ist grundsätzlich kein Gegner davon, Baurecht zu schaffen, doch muss abgewägt werden, welche Nutzen damit verfolgt werden. Unsere größte Priorität liegt bei sozialen Unterstützungen im Punkt Wohnungsbau.",q15:"Fresh bekennt sich zum Klimaschutz, deshalb sind wir dafür, dass bei Neubauten auf Nachhaltigkeit geachtet wird.",q16:"Als Grüne Lunge unserer Innenstadt muss sie erhalten bleiben. Als Vorschlag plädieren wir für einen natürlich gehaltenen Park.",q17:null,q18:"Wir orientieren uns hier ganz an der Nachfrage und unterstützen alle Ausschreibungen für Gewerbegebiete, wenn deren Umsetzung sinnvoll und nötig ist.",q19:"Wir sehen keine praktikable Möglichkeit, die Gewerbesteuer massiv genug zu senken, ohne große Auswirkungen auf den städtischen Haushalt.",q20:"Ein Wirtschaftsförderer mag kurzfristig Unternehmen anwerben können, jedoch halten wir den langfristigen Nutzen für so gering, dass sich die Kosten nicht rentieren.",q21:"Wir halten eine feste Stelle für sinnvoll, doch wenn die Moosburg Marketing eG diese weiter besetzt, muss die Zusammenarbeit verbessert werden.",q22:"Die städtischen Gebühren sollen an die jährliche Inflation gekoppelt werden, um diese auch im Haushalt abbilden zu können.",q23:"Die Sicherheit von Schulkindern ist sehr wichtig. Zu erwarten, dass Kinder nur sicher zur Schule kommen, wenn sie sich an Pläne halten, ist unrealistisch.",q24:"Der Transport aller Schüler muss zu jeder Zeit sicher gewährleistet sein, doch solange das erfüllt ist, muss man nicht durch zusätzliche Busse den Verkehr unnötig erschweren.",q25:null,q26:"Demokratie beginnt bereits in jungem Alter. Als Kommune, die das älteste JuPa in Bayern beherbergt, sollte dies der natürliche nächste Schritt sein.",q27:"Wir sind dafür, dass der neue Plan bestmöglich für das kulturelle Leben genutzt wird. Wenn man weitere Buden benötigt, werden wir uns dafür einsetzen.",q28:"Fresh setzt sich für die Vielfalt in Moosburg ein. Das beinhaltet natürlich auch das Schaffen von alternativen Bestattungsmöglichkeiten.",q29:"Mit der Erinnerung und dem Verständnis der Vergangenheit haben wir eine besondere Verantwortung, das historische Erbe unserer Stadt zu schützen.",q30:"Die Beschlüsse des Stadtrats sind demokratisch getroffen und verbindlich, daher sollte dies im Einklang des geltenden Rechts möglich gemacht werden.",q31:"Fresh setzt sich für den Klimaschutz ein, der natürlich auch mit Förderungen unterstützt werden muss.",q32:null,q33:"Das Bahnhofsgebäude ist definitiv allen Bürgern in seiner jetzigen Form ein Dorn im Auge, dies würde sich durch einen Container-Ersatz nicht ändern.",q34:"Die Stadt hat diesen gekauft, um daraus ein anschauliches Tor zu Moosburg zu schaffen.",q35:"Fresh setzt sich für eine intensive Partizipation und Transparenz ein und ist für jede Beteiligungsform, die den Bürger*innen mehr Gehör verschafft.",q36:"Der Umbau des Plans wurde als Aufenthaltsfläche konzipiert – sämtliche nicht ausgewiesenen Parkplätze sollen gestrichen und Verstöße hart geahndet werden."},
   },
   {
     id:"linke", name:"LINKE", farbe:"#BE3075", teilnehmend:true,
@@ -127,8 +120,6 @@ const PARTEIEN = [
     begruendungen:{q1:null,q2:null,q3:null,q4:"Neutral weil man dies pauschal nicht beantworten kann. Eine gesicherte, belastbare Erhebung von Livedaten ist sehr kostenintensiv und muss auch gepflegt werden.",q5:null,q6:"Grundsätzlich ja, aber nicht wegen dem zweifelhaften finanziellen Spielraum der hier angezweifelt werden darf.",q7:null,q8:"Nachtverkehr von was? Flügen? Zügen? LKWs?",q9:"Ja, wenn das Personal einverstanden, entsprechend entlohnt, ausgestattet und geschult wird.",q10:null,q11:null,q12:null,q13:null,q14:"Wenn dann nur Sozialwohnungen.",q15:null,q16:null,q17:null,q18:"Erst die vorhandenen nutzen und modernisieren, dann schauma weiter.",q19:null,q20:null,q21:null,q22:null,q23:null,q24:null,q25:null,q26:null,q27:"Grundsätzlich ja, abhängig von der Bürger:innenbefragung und dem langfristigen Ziel.",q28:null,q29:null,q30:null,q31:null,q32:null,q33:null,q34:null,q35:null,q36:null},
   },
 ];
-
-// ─── HELPERS ──────────────────────────────────────────────────────────────────
 
 function berechneMatch(partei, nutzerAntworten, doppelt) {
   let punkte=0, max=0;
@@ -151,7 +142,8 @@ function shuffle(arr){
 }
 
 const ROT="#B8121E", GOLD="#C8A84B";
-const SF="'Source Sans 3',sans-serif", HF="'Libre Baskerville',Georgia,serif";
+const SF="'Source Sans 3',system-ui,sans-serif";
+const HF="'Libre Baskerville',Georgia,serif";
 const KAT_FARBEN={
   "Verkehr & Mobilität":"#C0152A","Digitalisierung & Transparenz":"#7C3AED",
   "Stadtentwicklung & Bauen":"#B45309","Wirtschaft & Finanzen":"#059669",
@@ -159,17 +151,42 @@ const KAT_FARBEN={
   "Klima & Umwelt":"#16A34A","Freizeit & Sport":"#0891B2","Demokratie & Beteiligung":"#8B1A1A",
 };
 const ANT_CFG={
-  ja:    {sym:"✓",farbe:"#16A34A",hell:"#DCFCE7",label:"Ja"},
+  ja:{sym:"✓",farbe:"#16A34A",hell:"#DCFCE7",label:"Ja"},
   neutral:{sym:"–",farbe:"#64748B",hell:"#F1F5F9",label:"Neutral"},
-  nein:  {sym:"✕",farbe:"#DC2626",hell:"#FEE2E2",label:"Nein"},
-  skip:  {sym:"·",farbe:"#AAA",   hell:"#F5F5F5",label:"Übersprungen"},
+  nein:{sym:"✕",farbe:"#DC2626",hell:"#FEE2E2",label:"Nein"},
+  skip:{sym:"·",farbe:"#AAA",hell:"#F5F5F5",label:"Übersprungen"},
 };
 
-// ─── COMPONENTS ───────────────────────────────────────────────────────────────
+const css = `
+  @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap');
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes barGrow{from{width:0}to{}}
+  @keyframes expandIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes scaleIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
+  .wk-fu{animation:fadeUp .5s ease both}
+  .wk-fu1{animation-delay:.06s}.wk-fu2{animation-delay:.16s}.wk-fu3{animation-delay:.28s}.wk-fu4{animation-delay:.40s}.wk-fu5{animation-delay:.52s}
+  .wk-bar{animation:barGrow 1s cubic-bezier(.22,.68,0,1.2) both}
+  .wk-expand{animation:expandIn .22s ease both}
+  .wk-modal{animation:scaleIn .22s ease}
+  .wk-btn-ans{transition:transform .1s,box-shadow .1s;cursor:pointer}
+  .wk-btn-ans:hover{transform:translateY(-3px)!important}
+  .wk-btn-ans:active{transform:translateY(0)!important}
+  .wk-karte-hdr{cursor:pointer;user-select:none;transition:background .15s}
+  .wk-karte-hdr:hover{background:#FAFAF7!important}
+  .wk-karte{animation:fadeUp .4s ease both}
+  .wk-row:not(:last-child){border-bottom:1px solid #EDE9DF}
+  .wk-ghost:hover{background:#E2DDD4!important}
+  .wk-prim:hover{background:#8B0D17!important;transform:translateY(-2px);box-shadow:0 8px 24px rgba(140,13,23,.3)!important}
+  .wk-gwt:hover{background:#F0EDE4!important}
+`;
 
-function AntwortIcon({antwort,size=26}){
+function AntwortIcon({antwort,size=24}){
   const c=ANT_CFG[antwort]||{sym:"?",farbe:"#CCC",hell:"#F5F5F5"};
-  return <div title={c.label} style={{width:size,height:size,borderRadius:"50%",background:c.hell,border:`2px solid ${c.farbe}`,display:"flex",alignItems:"center",justifyContent:"center",color:c.farbe,fontWeight:700,fontSize:size*.44,fontFamily:SF,flexShrink:0}}>{c.sym}</div>;
+  return(
+    <div style={{width:size,height:size,borderRadius:"50%",background:c.hell,border:`2px solid ${c.farbe}`,display:"flex",alignItems:"center",justifyContent:"center",color:c.farbe,fontWeight:700,fontSize:size*.44,fontFamily:SF,flexShrink:0}}>
+      {c.sym}
+    </div>
+  );
 }
 
 function DetailPanel({partei,nutzerAntworten}){
@@ -178,21 +195,19 @@ function DetailPanel({partei,nutzerAntworten}){
     return na&&na!=="skip"&&pa!==null&&pa!==undefined;
   });
   if(!geordnet.length) return(
-    <div className="expand-panel" style={{padding:"16px 18px",borderTop:"1.5px solid #EDE9DF"}}>
-      <p style={{fontFamily:SF,fontSize:".85rem",color:"#999",fontStyle:"italic"}}>Keine Antworten für den Vergleich verfügbar.</p>
+    <div className="wk-expand" style={{padding:"14px 16px",borderTop:"1.5px solid #EDE9DF"}}>
+      <p style={{fontFamily:SF,fontSize:".83rem",color:"#999",fontStyle:"italic"}}>Keine Antworten verfügbar.</p>
     </div>
   );
   return(
-    <div className="expand-panel" style={{borderTop:"1.5px solid #EDE9DF"}}>
-      <div style={{display:"flex",gap:18,padding:"9px 18px",background:"#F7F5F0",borderBottom:"1px solid #EDE9DF",justifyContent:"flex-end"}}>
-        <div style={{display:"flex",alignItems:"center",gap:6}}>
-          <div style={{width:9,height:9,borderRadius:"50%",background:partei.farbe,flexShrink:0}}/>
-          <span style={{fontSize:".75rem",color:"#555",fontFamily:SF}}>{partei.name}</span>
-        </div>
-        <div style={{display:"flex",alignItems:"center",gap:6}}>
-          <div style={{width:9,height:9,borderRadius:"50%",background:"#888",flexShrink:0}}/>
-          <span style={{fontSize:".75rem",color:"#555",fontFamily:SF}}>Deine Antwort</span>
-        </div>
+    <div className="wk-expand" style={{borderTop:"1.5px solid #EDE9DF"}}>
+      <div style={{display:"flex",gap:16,padding:"8px 16px",background:"#F7F5F0",borderBottom:"1px solid #EDE9DF",justifyContent:"flex-end"}}>
+        {[{farbe:partei.farbe,label:partei.name},{farbe:"#888",label:"Du"}].map(({farbe,label})=>(
+          <div key={label} style={{display:"flex",alignItems:"center",gap:5}}>
+            <div style={{width:8,height:8,borderRadius:"50%",background:farbe}}/>
+            <span style={{fontSize:".72rem",color:"#555",fontFamily:SF}}>{label}</span>
+          </div>
+        ))}
       </div>
       {geordnet.map(frage=>{
         const pa=partei.antworten[frage.id],na=nutzerAntworten[frage.id];
@@ -200,24 +215,26 @@ function DetailPanel({partei,nutzerAntworten}){
         const kc=KAT_FARBEN[frage.kategorie]||ROT;
         const match=pa===na,teilMatch=!match&&(pa==="neutral"||na==="neutral");
         return(
-          <div key={frage.id} className="detail-row" style={{padding:"12px 18px",background:match?"#F0FAF4":teilMatch?"#FFFCF0":"#fff"}}>
-            <div style={{fontSize:".68rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".05em",color:kc,marginBottom:6}}>{frage.kategorie}</div>
-            <div style={{display:"flex",gap:12,alignItems:"flex-start"}}>
-              <p style={{flex:1,fontFamily:SF,fontSize:".86rem",color:"#1A1A2E",lineHeight:1.52}}>{frage.text}</p>
-              <div style={{display:"flex",flexDirection:"column",gap:6,flexShrink:0}}>
-                <div style={{display:"flex",alignItems:"center",gap:5}}>
-                  <div style={{width:8,height:8,borderRadius:"50%",background:partei.farbe,flexShrink:0}}/>
-                  <AntwortIcon antwort={pa} size={26}/>
+          <div key={frage.id} className="wk-row" style={{padding:"11px 16px",background:match?"#F0FAF4":teilMatch?"#FFFCF0":"#fff"}}>
+            <div style={{fontSize:".65rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".05em",color:kc,marginBottom:5}}>{frage.kategorie}</div>
+            <div style={{display:"flex",gap:10,alignItems:"flex-start"}}>
+              <p style={{flex:1,fontFamily:SF,fontSize:".84rem",color:"#1A1A2E",lineHeight:1.5}}>{frage.text}</p>
+              <div style={{display:"flex",flexDirection:"column",gap:5,flexShrink:0}}>
+                <div style={{display:"flex",alignItems:"center",gap:4}}>
+                  <div style={{width:7,height:7,borderRadius:"50%",background:partei.farbe}}/>
+                  <AntwortIcon antwort={pa} size={24}/>
                 </div>
-                <div style={{display:"flex",alignItems:"center",gap:5}}>
-                  <div style={{width:8,height:8,borderRadius:"50%",background:"#888",flexShrink:0}}/>
-                  <AntwortIcon antwort={na} size={26}/>
+                <div style={{display:"flex",alignItems:"center",gap:4}}>
+                  <div style={{width:7,height:7,borderRadius:"50%",background:"#888"}}/>
+                  <AntwortIcon antwort={na} size={24}/>
                 </div>
               </div>
             </div>
             {beg
-              ?<div style={{marginTop:8,background:"#F5F2EB",borderLeft:`3px solid ${partei.farbe}`,borderRadius:"0 6px 6px 0",padding:"7px 10px"}}><p style={{fontFamily:SF,fontSize:".8rem",color:"#444",lineHeight:1.55,fontStyle:"italic"}}>{beg}</p></div>
-              :<p style={{marginTop:5,fontFamily:SF,fontSize:".77rem",color:"#BBB",fontStyle:"italic"}}>Keine Begründung eingereicht.</p>
+              ?<div style={{marginTop:7,background:"#F5F2EB",borderLeft:`3px solid ${partei.farbe}`,borderRadius:"0 5px 5px 0",padding:"6px 10px"}}>
+                <p style={{fontFamily:SF,fontSize:".78rem",color:"#444",lineHeight:1.55,fontStyle:"italic"}}>{beg}</p>
+               </div>
+              :<p style={{marginTop:4,fontFamily:SF,fontSize:".74rem",color:"#CCC",fontStyle:"italic"}}>Keine Begründung eingereicht.</p>
             }
           </div>
         );
@@ -227,34 +244,28 @@ function DetailPanel({partei,nutzerAntworten}){
 }
 
 function InfoPopup({onClose}){
-  const beteiligte=[
-    {name:"Benedict Aria Gruber",rolle:"Digitalisierungsreferent, StR · FRESH"},
-    {name:"Philipp Fincke",      rolle:"StR · FDP / parteilos"},
-    {name:"Kilian Linz",         rolle:"StR · Grüne"},
-    {name:"Stefan John",         rolle:"StR a.D. · Linke"},
-  ];
   return(
-    <div className="overlay" onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(15,5,5,.6)",zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
-      <div className="popup-modal" onClick={e=>e.stopPropagation()} style={{background:"#FFFDF7",borderRadius:18,maxWidth:500,width:"100%",padding:"30px 28px",boxShadow:"0 24px 64px rgba(0,0,0,.3)",border:`2px solid ${GOLD}55`,fontFamily:SF,maxHeight:"90vh",overflowY:"auto"}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:16}}>
-          <h2 style={{fontFamily:HF,color:ROT,fontSize:"1.4rem",lineHeight:1.2}}>Über dieses Projekt</h2>
-          <button onClick={onClose} style={{background:"none",border:"none",fontSize:"1.6rem",cursor:"pointer",color:"#AAA",lineHeight:1}}>×</button>
+    <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(10,0,0,.6)",zIndex:9999,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
+      <div className="wk-modal" onClick={e=>e.stopPropagation()} style={{background:"#FFFDF7",borderRadius:16,maxWidth:460,width:"100%",padding:"26px 24px",boxShadow:"0 20px 60px rgba(0,0,0,.35)",border:`2px solid ${GOLD}55`,fontFamily:SF,maxHeight:"88vh",overflowY:"auto"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:14}}>
+          <h2 style={{fontFamily:HF,color:ROT,fontSize:"1.3rem"}}>Über dieses Projekt</h2>
+          <button onClick={onClose} style={{background:"none",border:"none",fontSize:"1.5rem",cursor:"pointer",color:"#AAA",lineHeight:1,padding:0}}>×</button>
         </div>
-        <p style={{fontSize:".93rem",color:"#333",lineHeight:1.72,marginBottom:16}}>Der <strong>WahlKompass Moosburg</strong> ist ein überparteiliches und ehrenamtliches Projekt. Es soll Bürgerinnen und Bürgern helfen, sich zur Kommunalwahl in Moosburg a.d. Isar zu orientieren.</p>
-        <div style={{background:"#FFF8E6",border:`1.5px solid ${GOLD}`,borderRadius:10,padding:"12px 16px",marginBottom:18}}>
-          <p style={{fontSize:".88rem",color:"#7A5F00",fontWeight:700,marginBottom:5}}>⚠️ Keine Wahlempfehlung</p>
-          <p style={{fontSize:".85rem",color:"#5A4500",lineHeight:1.65}}>Dieses Tool stellt ausdrücklich <strong>keine Wahlempfehlung</strong> dar. Es soll die eigene Meinungsbildung unterstützen, nicht ersetzen. Für die Inhalte der Parteiantworten sind ausschließlich die jeweiligen Parteien selbst verantwortlich.</p>
+        <p style={{fontSize:".9rem",color:"#333",lineHeight:1.7,marginBottom:14}}>Der <strong>WahlKompass Moosburg</strong> ist ein überparteiliches und ehrenamtliches Projekt zur Kommunalwahl in Moosburg a.d. Isar.</p>
+        <div style={{background:"#FFF8E6",border:`1.5px solid ${GOLD}`,borderRadius:9,padding:"11px 14px",marginBottom:16}}>
+          <p style={{fontSize:".85rem",color:"#7A5F00",fontWeight:700,marginBottom:4}}>⚠️ Keine Wahlempfehlung</p>
+          <p style={{fontSize:".82rem",color:"#5A4500",lineHeight:1.62}}>Dieses Tool stellt ausdrücklich <strong>keine Wahlempfehlung</strong> dar. Für die Inhalte der Parteiantworten sind ausschließlich die jeweiligen Parteien selbst verantwortlich.</p>
         </div>
-        <p style={{fontSize:".78rem",color:"#999",fontWeight:700,textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>Ehrenamtlich beteiligt</p>
-        <div style={{display:"flex",flexDirection:"column",gap:7,marginBottom:22}}>
-          {beteiligte.map(p=>(
-            <div key={p.name} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"9px 12px",background:"#F5F2EB",borderRadius:9,gap:12}}>
-              <span style={{fontWeight:700,color:"#1A1A2E",fontSize:".9rem"}}>{p.name}</span>
-              <span style={{color:"#777",fontSize:".78rem",textAlign:"right",lineHeight:1.3}}>{p.rolle}</span>
+        <p style={{fontSize:".75rem",color:"#999",fontWeight:700,textTransform:"uppercase",letterSpacing:".07em",marginBottom:9}}>Ehrenamtlich beteiligt</p>
+        <div style={{display:"flex",flexDirection:"column",gap:6,marginBottom:20}}>
+          {[["Benedict Aria Gruber","Digitalisierungsreferent, StR · FRESH"],["Philipp Fincke","StR · FDP / parteilos"],["Kilian Linz","StR · Grüne"],["Stefan John","StR a.D. · Linke"]].map(([n,r])=>(
+            <div key={n} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 11px",background:"#F5F2EB",borderRadius:8,gap:10}}>
+              <span style={{fontWeight:700,color:"#1A1A2E",fontSize:".87rem"}}>{n}</span>
+              <span style={{color:"#777",fontSize:".75rem",textAlign:"right",lineHeight:1.3}}>{r}</span>
             </div>
           ))}
         </div>
-        <button onClick={onClose} className="btn-primary" style={{width:"100%",background:ROT,color:"#fff",border:"none",borderRadius:10,padding:"12px",fontSize:".95rem",fontFamily:SF,fontWeight:700,cursor:"pointer"}}>Schließen</button>
+        <button onClick={onClose} className="wk-prim" style={{width:"100%",background:ROT,color:"#fff",border:"none",borderRadius:9,padding:"11px",fontSize:".93rem",fontFamily:SF,fontWeight:700,cursor:"pointer",transition:"all .18s"}}>Schließen</button>
       </div>
     </div>
   );
@@ -262,25 +273,25 @@ function InfoPopup({onClose}){
 
 function WelcomeScreen({onStart,onInfo}){
   return(
-    <div style={{minHeight:"100vh",background:"#F5F2EB",display:"flex",justifyContent:"center",alignItems:"flex-start",padding:"40px 16px 48px",fontFamily:SF}}>
-      <div style={{maxWidth:560,width:"100%",display:"flex",flexDirection:"column",alignItems:"center",gap:20}}>
-        <div className="fu fu1" style={{background:`${ROT}18`,color:ROT,border:`1px solid ${ROT}35`,borderRadius:99,padding:"6px 16px",fontSize:".85rem",fontWeight:600}}>📍 Moosburg a.d. Isar</div>
-        <h1 className="fu fu2" style={{fontFamily:HF,fontSize:"clamp(2.4rem,8vw,3.6rem)",color:ROT,textAlign:"center",lineHeight:1.15,letterSpacing:"-.02em"}}>Wahl<span style={{color:GOLD}}>Kompass</span></h1>
-        <p className="fu fu3" style={{color:"#444",fontSize:"1.05rem",textAlign:"center",lineHeight:1.65}}>Kommunalwahl Moosburg · Finde heraus, welche Partei<br/>deinen Ansichten am nächsten steht.</p>
-        <div className="fu fu3" style={{display:"flex",gap:14,flexWrap:"wrap",justifyContent:"center"}}>
+    <div style={{minHeight:"100%",background:"#F5F2EB",display:"flex",justifyContent:"center",alignItems:"flex-start",padding:"36px 16px 48px",fontFamily:SF}}>
+      <div style={{maxWidth:520,width:"100%",display:"flex",flexDirection:"column",alignItems:"center",gap:18}}>
+        <div className="wk-fu wk-fu1" style={{background:`${ROT}18`,color:ROT,border:`1px solid ${ROT}35`,borderRadius:99,padding:"5px 14px",fontSize:".82rem",fontWeight:600}}>📍 Moosburg a.d. Isar</div>
+        <h1 className="wk-fu wk-fu2" style={{fontFamily:HF,fontSize:"clamp(2.2rem,7vw,3.4rem)",color:ROT,textAlign:"center",lineHeight:1.15,letterSpacing:"-.02em"}}>Wahl<span style={{color:GOLD}}>Kompass</span></h1>
+        <p className="wk-fu wk-fu3" style={{color:"#444",fontSize:"1rem",textAlign:"center",lineHeight:1.65}}>Kommunalwahl Moosburg · Finde heraus, welche Partei deinen Ansichten am nächsten steht.</p>
+        <div className="wk-fu wk-fu3" style={{display:"flex",gap:12,flexWrap:"wrap",justifyContent:"center"}}>
           {[["36","Fragen"],["6","Parteien"],["~10","Minuten"]].map(([z,l])=>(
-            <div key={l} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2,background:"#fff",border:"1.5px solid #E5E0D5",borderRadius:12,padding:"14px 22px",minWidth:90}}>
-              <span style={{fontFamily:HF,fontSize:"1.8rem",color:ROT,fontWeight:700}}>{z}</span>
-              <span style={{fontSize:".78rem",color:"#777",textTransform:"uppercase",letterSpacing:".07em"}}>{l}</span>
+            <div key={l} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2,background:"#fff",border:"1.5px solid #E5E0D5",borderRadius:11,padding:"12px 20px",minWidth:84}}>
+              <span style={{fontFamily:HF,fontSize:"1.7rem",color:ROT,fontWeight:700}}>{z}</span>
+              <span style={{fontSize:".74rem",color:"#777",textTransform:"uppercase",letterSpacing:".07em"}}>{l}</span>
             </div>
           ))}
         </div>
-        <div className="fu fu3" style={{background:"#fff",border:"1.5px solid #E5E0D5",borderRadius:14,padding:"16px 22px",maxWidth:480,width:"100%"}}>
-          <p style={{color:"#555",fontSize:".93rem",lineHeight:1.68,textAlign:"center"}}>Die Fragen erscheinen in <strong>zufälliger Reihenfolge</strong>. Antworte mit <strong>Ja</strong>, <strong>Neutral</strong> oder <strong>Nein</strong>, oder überspringe eine Frage. Am Ende kannst du wichtige Themen <strong>doppelt gewichten</strong>.</p>
+        <div className="wk-fu wk-fu3" style={{background:"#fff",border:"1.5px solid #E5E0D5",borderRadius:13,padding:"14px 20px",maxWidth:440,width:"100%"}}>
+          <p style={{color:"#555",fontSize:".9rem",lineHeight:1.68,textAlign:"center"}}>Fragen in <strong>zufälliger Reihenfolge</strong>. Antworte mit <strong>Ja</strong>, <strong>Neutral</strong> oder <strong>Nein</strong>, oder überspringe. Am Ende kannst du Themen <strong>doppelt gewichten</strong>.</p>
         </div>
-        <button className="fu fu4 btn-primary" onClick={onStart} style={{background:ROT,color:"#fff",border:"none",borderRadius:12,padding:"15px 38px",fontSize:"1.05rem",fontFamily:SF,fontWeight:700,cursor:"pointer",boxShadow:`0 4px 20px ${ROT}40`}}>Jetzt starten →</button>
-        <button className="fu fu5 btn-ghost" onClick={onInfo} style={{background:"transparent",border:"1.5px solid #C8C2B4",borderRadius:99,padding:"7px 20px",fontSize:".85rem",color:"#666",cursor:"pointer",fontFamily:SF}}>ℹ️ Über dieses Projekt</button>
-        <p className="fu fu5" style={{fontSize:".78rem",color:"#AAA",textAlign:"center"}}>Keine Daten werden gespeichert · Alles läuft lokal in deinem Browser</p>
+        <button className="wk-fu wk-fu4 wk-prim" onClick={onStart} style={{background:ROT,color:"#fff",border:"none",borderRadius:11,padding:"14px 36px",fontSize:"1rem",fontFamily:SF,fontWeight:700,cursor:"pointer",boxShadow:`0 4px 20px ${ROT}40`,transition:"all .18s"}}>Jetzt starten →</button>
+        <button className="wk-fu wk-fu5 wk-ghost" onClick={onInfo} style={{background:"transparent",border:"1.5px solid #C8C2B4",borderRadius:99,padding:"6px 18px",fontSize:".82rem",color:"#666",cursor:"pointer",fontFamily:SF,transition:"background .15s"}}>ℹ️ Über dieses Projekt</button>
+        <p className="wk-fu wk-fu5" style={{fontSize:".75rem",color:"#AAA",textAlign:"center"}}>Keine Daten werden gespeichert · Alles läuft lokal in deinem Browser</p>
       </div>
     </div>
   );
@@ -290,32 +301,37 @@ function QuizScreen({frage,idx,gesamt,onAntwort,aktAntwort,onZurueck}){
   const kc=KAT_FARBEN[frage.kategorie]||ROT;
   const fp=(idx/gesamt)*100;
   return(
-    <div style={{height:"100vh",display:"flex",flexDirection:"column",background:"#F5F2EB",fontFamily:SF}}>
-      <div style={{flex:1,overflowY:"auto",display:"flex",justifyContent:"center",padding:"20px 16px 12px"}}>
-        <div style={{maxWidth:580,width:"100%",display:"flex",flexDirection:"column",gap:16}}>
-          <div style={{display:"flex",alignItems:"center",gap:12}}>
-            <div style={{flex:1,height:6,background:"#E5E0D5",borderRadius:99,overflow:"hidden"}}>
+    <div style={{height:"100%",display:"flex",flexDirection:"column",background:"#F5F2EB",fontFamily:SF}}>
+      <div style={{flex:1,overflowY:"auto",display:"flex",justifyContent:"center",padding:"18px 14px 10px"}}>
+        <div style={{maxWidth:560,width:"100%",display:"flex",flexDirection:"column",gap:14}}>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <div style={{flex:1,height:5,background:"#E5E0D5",borderRadius:99,overflow:"hidden"}}>
               <div style={{height:"100%",width:`${fp}%`,background:GOLD,borderRadius:99,transition:"width .4s ease"}}/>
             </div>
-            <span style={{fontSize:".85rem",color:"#888",minWidth:50,textAlign:"right"}}>{idx+1} / {gesamt}</span>
+            <span style={{fontSize:".82rem",color:"#888",minWidth:46,textAlign:"right"}}>{idx+1} / {gesamt}</span>
           </div>
-          <div style={{padding:"4px 12px",borderRadius:99,fontSize:".74rem",fontWeight:700,letterSpacing:".05em",background:kc+"18",color:kc,border:`1px solid ${kc}40`,alignSelf:"flex-start",textTransform:"uppercase"}}>{frage.kategorie}</div>
-          <div key={frage.id} style={{background:"#fff",borderRadius:16,padding:"26px",border:"1.5px solid #E5E0D5",boxShadow:"0 2px 16px rgba(0,0,0,.05)",animation:"fadeUp .35s ease both"}}>
-            <p style={{fontFamily:HF,fontSize:"clamp(1.05rem,3.5vw,1.22rem)",color:"#1A1A2E",lineHeight:1.58}}>{frage.text}</p>
+          <div style={{padding:"3px 11px",borderRadius:99,fontSize:".72rem",fontWeight:700,letterSpacing:".05em",background:kc+"18",color:kc,border:`1px solid ${kc}40`,alignSelf:"flex-start",textTransform:"uppercase"}}>{frage.kategorie}</div>
+          <div key={frage.id} style={{background:"#fff",borderRadius:14,padding:"22px",border:"1.5px solid #E5E0D5",boxShadow:"0 2px 14px rgba(0,0,0,.05)",animation:"fadeUp .3s ease both"}}>
+            <p style={{fontFamily:HF,fontSize:"clamp(1rem,3.2vw,1.18rem)",color:"#1A1A2E",lineHeight:1.58}}>{frage.text}</p>
           </div>
         </div>
       </div>
-      <div style={{background:"#F5F2EB",borderTop:"1.5px solid #E5E0D5",padding:"12px 16px 18px",display:"flex",justifyContent:"center",flexShrink:0}}>
-        <div style={{maxWidth:580,width:"100%",display:"flex",flexDirection:"column",gap:9}}>
-          <div style={{display:"flex",gap:10}}>
+      <div style={{background:"#F5F2EB",borderTop:"1.5px solid #E5E0D5",padding:"10px 14px 16px",display:"flex",justifyContent:"center",flexShrink:0}}>
+        <div style={{maxWidth:560,width:"100%",display:"flex",flexDirection:"column",gap:8}}>
+          <div style={{display:"flex",gap:9}}>
             {[{label:"Ja",sym:"✓",farbe:"#16A34A",hell:"#DCFCE7",val:"ja"},{label:"Neutral",sym:"–",farbe:"#64748B",hell:"#F1F5F9",val:"neutral"},{label:"Nein",sym:"✕",farbe:"#DC2626",hell:"#FEE2E2",val:"nein"}].map(({label,sym,farbe,hell,val})=>{
               const aktiv=aktAntwort===val;
-              return <button key={val} className="btn-answer" onClick={()=>onAntwort(val)} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:4,padding:"13px 8px",borderRadius:12,border:`2px solid ${farbe}`,background:aktiv?farbe:hell,color:aktiv?"#fff":farbe,fontFamily:SF,fontSize:".9rem",fontWeight:aktiv?700:600,boxShadow:aktiv?`0 4px 16px ${farbe}44`:"none"}}><span style={{fontSize:"1.15rem"}}>{sym}</span><span>{label}</span></button>;
+              return(
+                <button key={val} className="wk-btn-ans" onClick={()=>onAntwort(val)} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:3,padding:"11px 6px",borderRadius:11,border:`2px solid ${farbe}`,background:aktiv?farbe:hell,color:aktiv?"#fff":farbe,fontFamily:SF,fontSize:".88rem",fontWeight:aktiv?700:600,boxShadow:aktiv?`0 4px 14px ${farbe}44`:"none",transition:"background .1s,color .1s"}}>
+                  <span style={{fontSize:"1.1rem"}}>{sym}</span>
+                  <span>{label}</span>
+                </button>
+              );
             })}
           </div>
-          <div style={{display:"flex",gap:8}}>
-            {idx>0&&<button className="btn-ghost" onClick={onZurueck} style={{flex:1,background:"#EDEAE2",border:"none",borderRadius:10,padding:"9px",fontFamily:SF,fontSize:".88rem",color:"#555",cursor:"pointer"}}>← Zurück</button>}
-            <button className="btn-ghost" onClick={()=>onAntwort("skip")} style={{flex:1,background:"#EDEAE2",border:"none",borderRadius:10,padding:"9px",fontFamily:SF,fontSize:".88rem",color:"#555",cursor:"pointer"}}>Überspringen →</button>
+          <div style={{display:"flex",gap:7}}>
+            {idx>0&&<button className="wk-ghost" onClick={onZurueck} style={{flex:1,background:"#EDEAE2",border:"none",borderRadius:9,padding:"8px",fontFamily:SF,fontSize:".85rem",color:"#555",cursor:"pointer",transition:"background .15s"}}>← Zurück</button>}
+            <button className="wk-ghost" onClick={()=>onAntwort("skip")} style={{flex:1,background:"#EDEAE2",border:"none",borderRadius:9,padding:"8px",fontFamily:SF,fontSize:".85rem",color:"#555",cursor:"pointer",transition:"background .15s"}}>Überspringen →</button>
           </div>
         </div>
       </div>
@@ -325,28 +341,28 @@ function QuizScreen({frage,idx,gesamt,onAntwort,aktAntwort,onZurueck}){
 
 function GewichtungScreen({fragen,doppelt,onToggle,onWeiter,onZurueck,beantw}){
   return(
-    <div style={{minHeight:"100vh",background:"#F5F2EB",display:"flex",justifyContent:"center",alignItems:"flex-start",padding:"28px 16px 48px",fontFamily:SF}}>
-      <div style={{maxWidth:600,width:"100%",display:"flex",flexDirection:"column",gap:16}}>
-        <h2 style={{fontFamily:HF,fontSize:"clamp(1.5rem,5vw,2rem)",color:ROT,letterSpacing:"-.02em"}}>Doppelte Gewichtung</h2>
-        <p style={{color:"#555",fontSize:".95rem",lineHeight:1.62}}>Du hast <strong>{beantw} Fragen</strong> beantwortet. Wähle Fragen, die dir besonders wichtig sind — sie fließen <strong>doppelt</strong> ins Ergebnis ein.</p>
-        {doppelt.size>0&&<div style={{background:"#FFF8E6",border:`1.5px solid ${GOLD}`,borderRadius:10,padding:"10px 16px",fontSize:".9rem",color:"#7A5F00"}}>⚖️ <strong>{doppelt.size}</strong> {doppelt.size===1?"Frage":"Fragen"} doppelt gewichtet</div>}
-        <div style={{display:"flex",flexDirection:"column",gap:8,maxHeight:"50vh",overflowY:"auto",paddingRight:4}}>
+    <div style={{minHeight:"100%",background:"#F5F2EB",display:"flex",justifyContent:"center",alignItems:"flex-start",padding:"24px 14px 48px",fontFamily:SF}}>
+      <div style={{maxWidth:580,width:"100%",display:"flex",flexDirection:"column",gap:14}}>
+        <h2 style={{fontFamily:HF,fontSize:"clamp(1.4rem,4.5vw,1.9rem)",color:ROT,letterSpacing:"-.02em"}}>Doppelte Gewichtung</h2>
+        <p style={{color:"#555",fontSize:".92rem",lineHeight:1.62}}>Du hast <strong>{beantw} Fragen</strong> beantwortet. Wähle Fragen, die dir besonders wichtig sind — sie fließen <strong>doppelt</strong> ins Ergebnis ein.</p>
+        {doppelt.size>0&&<div style={{background:"#FFF8E6",border:`1.5px solid ${GOLD}`,borderRadius:9,padding:"9px 14px",fontSize:".87rem",color:"#7A5F00"}}>⚖️ <strong>{doppelt.size}</strong> {doppelt.size===1?"Frage":"Fragen"} doppelt gewichtet</div>}
+        <div style={{display:"flex",flexDirection:"column",gap:7,maxHeight:"46vh",overflowY:"auto",paddingRight:3}}>
           {fragen.map(f=>{
             const aktiv=doppelt.has(f.id),kc=KAT_FARBEN[f.kategorie]||ROT;
             return(
-              <div key={f.id} className="gewicht-item" onClick={()=>onToggle(f.id)} style={{display:"flex",alignItems:"center",gap:12,padding:"11px 14px",borderRadius:12,background:aktiv?"#FFF8E6":"#FAFAF8",border:`2px solid ${aktiv?GOLD:"#E5E0D5"}`,boxShadow:aktiv?`0 2px 12px ${GOLD}33`:"none"}}>
+              <div key={f.id} className="wk-gwt" onClick={()=>onToggle(f.id)} style={{display:"flex",alignItems:"center",gap:10,padding:"10px 13px",borderRadius:11,background:aktiv?"#FFF8E6":"#FAFAF8",border:`2px solid ${aktiv?GOLD:"#E5E0D5"}`,cursor:"pointer",transition:"all .15s"}}>
                 <div style={{flex:1}}>
-                  <span style={{fontSize:".71rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".06em",color:kc,display:"block",marginBottom:3}}>{f.kategorie}</span>
-                  <p style={{fontSize:".87rem",color:"#333",lineHeight:1.4}}>{f.text}</p>
+                  <span style={{fontSize:".68rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".06em",color:kc,display:"block",marginBottom:2}}>{f.kategorie}</span>
+                  <p style={{fontSize:".85rem",color:"#333",lineHeight:1.4}}>{f.text}</p>
                 </div>
-                <div style={{minWidth:36,height:36,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,fontSize:".8rem",background:aktiv?GOLD:"#E5E0D5",color:aktiv?"#fff":"#888",flexShrink:0}}>{aktiv?"×2":"×1"}</div>
+                <div style={{minWidth:34,height:34,borderRadius:7,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,fontSize:".78rem",background:aktiv?GOLD:"#E5E0D5",color:aktiv?"#fff":"#888",flexShrink:0}}>{aktiv?"×2":"×1"}</div>
               </div>
             );
           })}
         </div>
-        <div style={{display:"flex",gap:10}}>
-          <button className="btn-ghost" onClick={onZurueck} style={{background:"#EDEAE2",border:"none",borderRadius:10,padding:"12px 20px",fontSize:".9rem",color:"#555",cursor:"pointer",fontFamily:SF}}>← Zurück</button>
-          <button className="btn-primary" onClick={onWeiter} style={{flex:1,background:ROT,color:"#fff",border:"none",borderRadius:12,padding:"12px 20px",fontSize:"1rem",fontFamily:SF,fontWeight:700,cursor:"pointer",boxShadow:`0 4px 16px ${ROT}35`}}>Ergebnis anzeigen →</button>
+        <div style={{display:"flex",gap:9}}>
+          <button className="wk-ghost" onClick={onZurueck} style={{background:"#EDEAE2",border:"none",borderRadius:9,padding:"11px 18px",fontSize:".88rem",color:"#555",cursor:"pointer",fontFamily:SF,transition:"background .15s"}}>← Zurück</button>
+          <button className="wk-prim" onClick={onWeiter} style={{flex:1,background:ROT,color:"#fff",border:"none",borderRadius:11,padding:"11px 18px",fontSize:".97rem",fontFamily:SF,fontWeight:700,cursor:"pointer",boxShadow:`0 4px 14px ${ROT}35`,transition:"all .18s"}}>Ergebnis anzeigen →</button>
         </div>
       </div>
     </div>
@@ -357,46 +373,47 @@ function ErgebnisseScreen({ergebnisse,nutzerAntworten,onNeustart,doppeltAnz,bean
   const [expandedId,setExpandedId]=useState(null);
   const maxMatch=ergebnisse.reduce((m,p)=>(p.match!==null&&p.match>m?p.match:m),0);
   return(
-    <div style={{minHeight:"100vh",background:"#F5F2EB",display:"flex",justifyContent:"center",alignItems:"flex-start",padding:"28px 16px 48px",fontFamily:SF}}>
-      <div style={{maxWidth:600,width:"100%",display:"flex",flexDirection:"column",gap:12}}>
-        <h2 style={{fontFamily:HF,fontSize:"clamp(1.5rem,5vw,2rem)",color:ROT,letterSpacing:"-.02em"}}>Dein Ergebnis</h2>
-        <p style={{color:"#666",fontSize:".93rem"}}>{beantw} beantwortete Fragen{doppeltAnz>0?` · ${doppeltAnz} doppelt gewichtet`:""} · <em>Tippe auf eine Partei für Details</em></p>
+    <div style={{minHeight:"100%",background:"#F5F2EB",display:"flex",justifyContent:"center",alignItems:"flex-start",padding:"24px 14px 48px",fontFamily:SF}}>
+      <div style={{maxWidth:580,width:"100%",display:"flex",flexDirection:"column",gap:10}}>
+        <h2 style={{fontFamily:HF,fontSize:"clamp(1.4rem,4.5vw,1.9rem)",color:ROT,letterSpacing:"-.02em"}}>Dein Ergebnis</h2>
+        <p style={{color:"#666",fontSize:".9rem"}}>{beantw} beantwortete Fragen{doppeltAnz>0?` · ${doppeltAnz} doppelt gewichtet`:""} · <em>Tippe für Details</em></p>
         {ergebnisse.map((p,i)=>{
           const isOpen=expandedId===p.id;
           return(
-            <div key={p.id} className="ergebnis-karte" style={{background:"#fff",border:`1.5px solid ${isOpen?p.farbe+"90":"#E5E0D5"}`,borderRadius:14,boxShadow:isOpen?`0 4px 20px ${p.farbe}22`:"0 2px 8px rgba(0,0,0,.04)",animationDelay:`${i*.07}s`,opacity:p.teilnehmend?1:.55,overflow:"hidden",transition:"border-color .2s,box-shadow .2s"}}>
-              <div className="karte-header" onClick={()=>p.teilnehmend&&setExpandedId(isOpen?null:p.id)} style={{padding:"16px 18px",background:isOpen?p.farbe+"08":"#fff",transition:"background .2s"}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-                  <div style={{display:"flex",alignItems:"center",gap:9,flexWrap:"wrap"}}>
-                    <div style={{width:11,height:11,borderRadius:"50%",background:p.farbe,flexShrink:0}}/>
-                    <span style={{fontFamily:HF,fontSize:"1rem",color:"#1A1A2E",fontWeight:700}}>{p.name}</span>
-                    {!p.teilnehmend&&<span style={{background:"#F3F3F3",color:"#888",fontSize:".72rem",fontWeight:700,padding:"3px 9px",borderRadius:99,border:"1px solid #DDD"}}>Nicht teilgenommen</span>}
+            <div key={p.id} className="wk-karte" style={{background:"#fff",border:`1.5px solid ${isOpen?p.farbe+"90":"#E5E0D5"}`,borderRadius:13,boxShadow:isOpen?`0 4px 18px ${p.farbe}22`:"0 2px 7px rgba(0,0,0,.04)",animationDelay:`${i*.065}s`,opacity:p.teilnehmend?1:.55,overflow:"hidden",transition:"border-color .2s,box-shadow .2s"}}>
+              <div className="wk-karte-hdr" onClick={()=>p.teilnehmend&&setExpandedId(isOpen?null:p.id)} style={{padding:"14px 16px",background:isOpen?p.farbe+"08":"#fff",transition:"background .2s"}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:9}}>
+                  <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+                    <div style={{width:10,height:10,borderRadius:"50%",background:p.farbe,flexShrink:0}}/>
+                    <span style={{fontFamily:HF,fontSize:".97rem",color:"#1A1A2E",fontWeight:700}}>{p.name}</span>
+                    {!p.teilnehmend&&<span style={{background:"#F3F3F3",color:"#888",fontSize:".7rem",fontWeight:700,padding:"2px 8px",borderRadius:99,border:"1px solid #DDD"}}>Nicht teilgenommen</span>}
                   </div>
-                  <div style={{display:"flex",alignItems:"center",gap:10}}>
-                    {p.match!==null?<span style={{fontFamily:HF,fontSize:"1.3rem",fontWeight:700,color:p.match>=60?"#16A34A":p.match>=40?"#B45309":"#DC2626"}}>{p.match} %</span>:<span style={{color:"#CCC",fontSize:"1.2rem",fontFamily:HF}}>–</span>}
-                    {p.teilnehmend&&<span style={{color:"#AAA",fontSize:"1rem",display:"inline-block",transform:isOpen?"rotate(180deg)":"rotate(0deg)",transition:"transform .25s"}}>▾</span>}
+                  <div style={{display:"flex",alignItems:"center",gap:9}}>
+                    {p.match!==null?<span style={{fontFamily:HF,fontSize:"1.25rem",fontWeight:700,color:p.match>=60?"#16A34A":p.match>=40?"#B45309":"#DC2626"}}>{p.match} %</span>:<span style={{color:"#CCC",fontSize:"1.1rem",fontFamily:HF}}>–</span>}
+                    {p.teilnehmend&&<span style={{color:"#AAA",fontSize:".9rem",display:"inline-block",transform:isOpen?"rotate(180deg)":"rotate(0deg)",transition:"transform .25s"}}>▾</span>}
                   </div>
                 </div>
-                <div style={{height:8,background:"#F0EDE4",borderRadius:99,overflow:"hidden",marginBottom:6}}>
-                  {p.match!==null?<div className="bar-fill" style={{height:"100%",width:`${p.match}%`,background:p.farbe,borderRadius:99,animationDelay:`${i*.07+.2}s`}}/>:<div style={{height:"100%",width:"100%",background:"#E5E0D5",borderRadius:99}}/>}
+                <div style={{height:7,background:"#F0EDE4",borderRadius:99,overflow:"hidden",marginBottom:5}}>
+                  {p.match!==null
+                    ?<div className="wk-bar" style={{height:"100%",width:`${p.match}%`,background:p.farbe,borderRadius:99,animationDelay:`${i*.065+.18}s`}}/>
+                    :<div style={{height:"100%",width:"100%",background:"#E5E0D5",borderRadius:99}}/>
+                  }
                 </div>
-                {p.match===null&&<p style={{fontSize:".8rem",color:"#999",fontStyle:"italic",lineHeight:1.5,marginTop:4}}>⚠️ Diese Partei hat ihre Antworten nicht fristgerecht eingereicht. Eine Übereinstimmung kann nicht berechnet werden.</p>}
-                {p.match===maxMatch&&p.match!==null&&<div style={{marginTop:8,background:"#FFFBEB",border:`1px solid ${GOLD}`,borderRadius:8,padding:"5px 12px",fontSize:".82rem",color:"#7A5F00",fontWeight:700,display:"inline-block"}}>🏆 Beste Übereinstimmung</div>}
+                {p.match===null&&<p style={{fontSize:".78rem",color:"#999",fontStyle:"italic",lineHeight:1.5,marginTop:3}}>⚠️ Diese Partei hat ihre Antworten nicht fristgerecht eingereicht.</p>}
+                {p.match===maxMatch&&p.match!==null&&<div style={{marginTop:7,background:"#FFFBEB",border:`1px solid ${GOLD}`,borderRadius:7,padding:"4px 11px",fontSize:".8rem",color:"#7A5F00",fontWeight:700,display:"inline-block"}}>🏆 Beste Übereinstimmung</div>}
               </div>
               {isOpen&&<DetailPanel partei={p} nutzerAntworten={nutzerAntworten}/>}
             </div>
           );
         })}
-        <div style={{display:"flex",justifyContent:"center",marginTop:6}}>
-          <button className="btn-primary" onClick={onNeustart} style={{background:ROT,color:"#fff",border:"none",borderRadius:12,padding:"13px 32px",fontSize:"1rem",fontFamily:SF,fontWeight:700,cursor:"pointer",boxShadow:`0 4px 16px ${ROT}35`}}>↺ Neu starten</button>
+        <div style={{display:"flex",justifyContent:"center",marginTop:4}}>
+          <button className="wk-prim" onClick={onNeustart} style={{background:ROT,color:"#fff",border:"none",borderRadius:11,padding:"12px 30px",fontSize:".97rem",fontFamily:SF,fontWeight:700,cursor:"pointer",boxShadow:`0 4px 14px ${ROT}35`,transition:"all .18s"}}>↺ Neu starten</button>
         </div>
-        <p style={{fontSize:".78rem",color:"#AAA",textAlign:"center",paddingBottom:8}}>Überparteiliches, ehrenamtliches Informationsprojekt · Keine Wahlempfehlung</p>
+        <p style={{fontSize:".75rem",color:"#AAA",textAlign:"center",paddingBottom:6}}>Überparteiliches, ehrenamtliches Informationsprojekt · Keine Wahlempfehlung</p>
       </div>
     </div>
   );
 }
-
-// ─── APP ──────────────────────────────────────────────────────────────────────
 
 function App(){
   const [screen,setScreen]=useState("welcome");
@@ -418,7 +435,8 @@ function App(){
 
   const ergebnisse=useMemo(()=>{
     if(screen!=="ergebnisse") return [];
-    return PARTEIEN.map(p=>({...p,match:p.teilnehmend?berechneMatch(p,antworten,doppelt):null}))
+    return PARTEIEN
+      .map(p=>({...p,match:p.teilnehmend?berechneMatch(p,antworten,doppelt):null}))
       .sort((a,b)=>{if(a.match===null&&b.match===null)return 0;if(a.match===null)return 1;if(b.match===null)return -1;return b.match-a.match;});
   },[screen,antworten,doppelt]);
 
@@ -426,13 +444,14 @@ function App(){
   const neustart=()=>{setAntw({});setDoppelt(new Set());setIdx(0);setScreen("welcome");};
 
   return(
-    <>
+    <div style={{height:"100vh",overflow:"auto",background:"#F5F2EB"}}>
+      <style>{css}</style>
       {popup&&<InfoPopup onClose={()=>setPopup(false)}/>}
       {screen==="welcome"    &&<WelcomeScreen onStart={()=>setScreen("quiz")} onInfo={()=>setPopup(true)}/>}
       {screen==="quiz"       &&<QuizScreen frage={frage} idx={idx} gesamt={gesamt} onAntwort={gibAntwort} aktAntwort={antworten[frage?.id]} onZurueck={()=>idx>0&&setIdx(i=>i-1)}/>}
       {screen==="gewichtung" &&<GewichtungScreen fragen={beantwFragen} doppelt={doppelt} onToggle={toggleDoppelt} onWeiter={()=>setScreen("ergebnisse")} onZurueck={()=>{setIdx(gesamt-1);setScreen("quiz");}} beantw={beantw}/>}
       {screen==="ergebnisse" &&<ErgebnisseScreen ergebnisse={ergebnisse} nutzerAntworten={antworten} onNeustart={neustart} doppeltAnz={doppelt.size} beantw={beantw}/>}
-    </>
+    </div>
   );
 }
 
