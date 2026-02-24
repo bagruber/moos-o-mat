@@ -1,100 +1,55 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WahlKompass Moosburg</title>
-  <meta name="description" content="Kommunalwahl Moosburg - Finde heraus, welche Partei deinen Ansichten am naechsten steht." />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WahlKompass Moosburg – Kommunalwahl 2026</title>
+  <meta name="description" content="Finde heraus, welche Partei deinen Ansichten bei der Kommunalwahl Moosburg am nächsten steht."/>
+  <meta name="theme-color" content="#B8121E"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body, #root { min-height: 100vh; background: #F5F2EB; }
-    @keyframes fadeUp   { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
-    @keyframes barGrow  { from { width:0; } to {} }
-    @keyframes scaleIn  { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
-    @keyframes expandIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
-    .fu{animation:fadeUp .55s ease both} .fu1{animation-delay:.08s} .fu2{animation-delay:.20s}
-    .fu3{animation-delay:.33s} .fu4{animation-delay:.46s} .fu5{animation-delay:.58s}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html,body,#root{height:100%;}
+    body{font-family:'Source Sans 3',sans-serif;background:#F5F2EB;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes barGrow{from{width:0}to{}}
+    @keyframes scaleIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+    @keyframes expandIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .fu{animation:fadeUp 0.55s ease both}
+    .fu1{animation-delay:.08s}.fu2{animation-delay:.20s}.fu3{animation-delay:.33s}.fu4{animation-delay:.46s}.fu5{animation-delay:.58s}
     .btn-primary{transition:background .18s,transform .15s,box-shadow .18s}
     .btn-primary:hover{background:#8B0D17!important;transform:translateY(-2px);box-shadow:0 8px 24px rgba(140,13,23,.3)!important}
     .btn-primary:active{transform:translateY(0)!important}
-    .btn-ghost{transition:background .15s} .btn-ghost:hover{background:#E2DDD4!important}
+    .btn-ghost{transition:background .15s}
+    .btn-ghost:hover{background:#E2DDD4!important}
     .btn-answer{transition:transform .12s,box-shadow .12s;cursor:pointer}
-    .btn-answer:hover{transform:translateY(-3px)!important} .btn-answer:active{transform:translateY(0)!important}
-    .gewicht-item{transition:background .15s,border-color .15s;cursor:pointer} .gewicht-item:hover{background:#F0EDE4!important}
+    .btn-answer:hover{transform:translateY(-3px)!important}
+    .btn-answer:active{transform:translateY(0)!important}
+    .gewicht-item{transition:background .15s,border-color .15s;cursor:pointer}
+    .gewicht-item:hover{background:#F0EDE4!important}
     .ergebnis-karte{animation:fadeUp .45s ease both}
-    .karte-header{cursor:pointer;user-select:none;transition:background .15s} .karte-header:hover{background:#FAFAF7!important}
+    .karte-header{cursor:pointer;user-select:none;transition:background .15s}
+    .karte-header:hover{background:#FAFAF7!important}
     .bar-fill{animation:barGrow 1s cubic-bezier(.22,.68,0,1.2) both}
-    .overlay{animation:fadeIn .2s ease} .popup-modal{animation:scaleIn .25s ease} .expand-panel{animation:expandIn .25s ease both}
+    .overlay{animation:fadeIn .2s ease}
+    .popup-modal{animation:scaleIn .25s ease}
+    .expand-panel{animation:expandIn .25s ease both}
     .detail-row:not(:last-child){border-bottom:1px solid #EDE9DF}
-    ::-webkit-scrollbar{width:5px} ::-webkit-scrollbar-track{background:#EDE9DF;border-radius:99px} ::-webkit-scrollbar-thumb{background:#C8B89A;border-radius:99px}
+    ::-webkit-scrollbar{width:5px}
+    ::-webkit-scrollbar-track{background:#EDE9DF;border-radius:99px}
+    ::-webkit-scrollbar-thumb{background:#C8B89A;border-radius:99px}
   </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
-  const { useState, useMemo, useCallback } = React;
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // DATENERFASSUNG – SETUP (~5 Minuten, einmalig)
-  // ═══════════════════════════════════════════════════════════════════════════
-  // Leer lassen ("") = Erfassung deaktiviert.
-  //
-  // 1. Neue Google-Tabelle anlegen → Sheet-ID aus der URL kopieren
-  // 2. script.google.com → Neues Projekt → Code ersetzen:
-  //
-  //   const SHEET_ID = "DEINE_SHEET_ID";
-  //   function doPost(e) {
-  //     const d = JSON.parse(e.postData.contents);
-  //     const s = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
-  //     if(s.getLastRow()===0) s.appendRow(["uhrzeit","dauer_sek","beantwortet","uebersprungen",
-  //       "q1","q2","q3","q4","q5","q6","q7","q8","q9","q10","q11","q12","q13","q14","q15",
-  //       "q16","q17","q18","q19","q20","q21","q22","q23","q24","q25","q26","q27","q28","q29",
-  //       "q30","q31","q32","q33","q34","q35","q36"]);
-  //     s.appendRow([d.uhrzeit,d.dauer_sek,d.beantwortet,d.uebersprungen,
-  //       ...["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10","q11","q12","q13","q14","q15",
-  //          "q16","q17","q18","q19","q20","q21","q22","q23","q24","q25","q26","q27","q28","q29",
-  //          "q30","q31","q32","q33","q34","q35","q36"].map(k=>d.antworten[k]||"")]);
-  //     return ContentService.createTextOutput("OK").setMimeType(ContentService.MimeType.TEXT);
-  //   }
-  //   function doGet(){return ContentService.createTextOutput("OK");}
-  //
-  // 3. Bereitstellen → Neue Bereitstellung → Web App → Zugriff: Jeder
-  //    → URL unten eintragen.
-  //
-  // Gespeichert wird NUR: Uhrzeit (HH:MM), Dauer, Antwortverhalten.
-  // Kein Datum, keine IP, kein Geraet, keine personenbezogenen Daten.
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  const COLLECT_URL = ""; // <- Deine Google Apps Script URL hier
-
-  async function erfasseNutzer(antworten, startzeit) {
-    if (!COLLECT_URL) return;
-    try {
-      const jetzt = new Date();
-      const uhrzeit = jetzt.toLocaleTimeString("de-DE", { hour:"2-digit", minute:"2-digit" });
-      const dauer_sek = Math.round((jetzt - startzeit) / 1000);
-      const vals = Object.values(antworten);
-      const beantwortet = vals.filter(a => a && a !== "skip").length;
-      const uebersprungen = vals.filter(a => a === "skip").length;
-      await fetch(COLLECT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          uhrzeit, dauer_sek, beantwortet, uebersprungen,
-          antworten: Object.fromEntries(FRAGEN.map(f => [f.id, antworten[f.id] || ""]))
-        }),
-        mode: "no-cors",
-      });
-    } catch(_) {}
-  }
-
+const { useState, useMemo, useCallback } = React;
 
 const FRAGEN = [
   { id:"q1",  kategorie:"Verkehr & Mobilität",           text:"Soll die Stadt Moosburg in der Innenstadt verkehrsberuhigte Bereiche schaffen?" },
@@ -117,7 +72,7 @@ const FRAGEN = [
   { id:"q18", kategorie:"Stadtentwicklung & Bauen",      text:"Soll die Stadt Moosburg neben der Erweiterung von Degernpoint weitere Gewerbegebiete schaffen?" },
   { id:"q19", kategorie:"Wirtschaft & Finanzen",         text:"Soll die Stadt Moosburg die Gewerbesteuer senken, um Unternehmen anzulocken?" },
   { id:"q20", kategorie:"Wirtschaft & Finanzen",         text:"Soll die Stadt Moosburg sich selbst durch personelle Verstärkung an der Wirtschaftsförderung beteiligen?" },
-  { id:"q21", kategorie:"Wirtschaft & Finanzen",         text:"Soll die Stadt Moosburg die Marketing eG weiterhin federführend für das städtische Marketing verantwortlich lassen?" },
+  { id:"q21", kategorie:"Wirtschaft & Finanzen",         text:"Soll die Marketing eG weiterhin federführend für das städtische Marketing verantwortlich lassen?" },
   { id:"q22", kategorie:"Wirtschaft & Finanzen",         text:"Soll die Stadt Moosburg städtische Gebühren regelmäßig erhöhen, um den Haushalt zu entlasten?" },
   { id:"q23", kategorie:"Soziales & Bildung",            text:"Soll die Stadt Moosburg Schulwegpläne erstellen, um die Schulwegsicherheit zu steigern?" },
   { id:"q24", kategorie:"Soziales & Bildung",            text:"Soll die Stadt Moosburg sich für Sitzplätze für alle Kinder in Schulbussen einsetzen?" },
@@ -128,7 +83,7 @@ const FRAGEN = [
   { id:"q29", kategorie:"Kultur & Gesellschaft",         text:"Soll die Stadt Moosburg sich für den Erhalt der Stalag-Baracken und die Schaffung eines Dokumentationszentrums einsetzen?" },
   { id:"q30", kategorie:"Kultur & Gesellschaft",         text:"Sollen am Rathaus der Stadt Moosburg andere Flaggen als nur die der Stadt Moosburg oder des Freistaates Bayern gehisst werden dürfen, wenn der Stadtrat dies beschließt?" },
   { id:"q31", kategorie:"Klima & Umwelt",                text:"Soll die Stadt Moosburg wieder Förderprogramme für Klimaschutzmaßnahmen auflegen?" },
-  { id:"q32", kategorie:"Freizeit & Sport",              text:"Soll die Stadt Moosburg den verfallenen Fahrradpark als modernen \u201eDirtpark\u201c erneuern?" },
+  { id:"q32", kategorie:"Freizeit & Sport",              text:"Soll die Stadt Moosburg den verfallenen Fahrradpark als modernen „Dirtpark" erneuern?" },
   { id:"q33", kategorie:"Stadtentwicklung & Bauen",      text:"Soll die Stadt Moosburg das Bahnhofsgebäude abreißen und durch einen kostengünstigen Containerbau ersetzen?" },
   { id:"q34", kategorie:"Stadtentwicklung & Bauen",      text:"Soll die Stadt Moosburg sich bemühen, das Bahnhofsgebäude wieder zu verkaufen?" },
   { id:"q35", kategorie:"Demokratie & Beteiligung",      text:"Soll die kommunale Mitbestimmung in Form von Bürgerräten, Umfragen und Onlinesprechstunden weiter intensiviert werden?" },
@@ -137,14 +92,14 @@ const FRAGEN = [
 
 const PARTEIEN = [
   {
-    id:"csu", name:"CSU", farbe:"#0088CC", teilnehmend:false,
-    antworten: Object.fromEntries(FRAGEN.map(f=>[f.id,null])),
-    begruendungen: Object.fromEntries(FRAGEN.map(f=>[f.id,null])),
+    id:"csu", name:"CSU", farbe:"#0088CC", teilnehmend:true,
+    antworten:{q1:"ja",q2:"nein",q3:"ja",q4:"neutral",q5:"ja",q6:"nein",q7:"ja",q8:"neutral",q9:"nein",q10:"ja",q11:"ja",q12:"neutral",q13:"nein",q14:"ja",q15:"ja",q16:"ja",q17:"neutral",q18:"ja",q19:"nein",q20:"ja",q21:"neutral",q22:"neutral",q23:"neutral",q24:"ja",q25:"neutral",q26:"neutral",q27:"neutral",q28:"ja",q29:"ja",q30:"nein",q31:"ja",q32:"ja",q33:"nein",q34:"nein",q35:"ja",q36:"nein"},
+    begruendungen:{q1:null,q2:"Mehr Kontrollen, mehr Aufklärung, bessere Markierung der Parkplätze für Elterntaxis.",q3:"Wo sinnvoll / nach Bedarf, z. B. bei Schulen und Kindertageseinrichtungen.",q4:"Nach Prüfung und Abwägung von Kosten/Nutzen.",q5:"Auf dem Gelände \"Alte Polizei\" → ausreichende zentrumsnahe Parkplätze, um die Attraktivität der Innenstadt zu erhöhen.",q6:"Kunden der Innenstadt nicht durch zu hohe Parkgebühren abschrecken.",q7:null,q8:"Nach Prüfung und Abwägung von Kosten/Nutzen.",q9:null,q10:null,q11:null,q12:"Bei Realisierung eines Parkhauses am Gelände \"Alte Polizei\" vorstellbar (Ersatz-Stellplätze).",q13:"Zuzug auf verträgliches Maß begrenzen.",q14:"Gewerbe ja / Zuzug auf verträgliches Maß.",q15:null,q16:null,q17:null,q18:"Um die Wirtschaft zu stärken und mehr Gewerbe in Moosburg anzusiedeln.",q19:null,q20:"Wirtschaftsförderer u. a. auf Antrag der CSU Moosburg beschlossen / als Kümmerer der Moosburger Firmen und Gewerbetreibenden, für Leerstandsmanagement und Firmenansiedlungen (Arbeitsplätze).",q21:"Marketing und Events durch Marketing eG / Wirtschaftsförderung durch Stadt Moosburg.",q22:"Nicht regelmäßig – Abwägung bei jeder Gebührenerhöhung notwendig.",q23:"Stärkung der Schülerlotsen / sichere Gestaltung der Schulwege.",q24:null,q25:"An Schulen.",q26:"Rederecht bei Themen des Jugendparlaments.",q27:"Falls Bürgerumfrage sich für den Christkindlmarkt auf dem Plan entscheidet, wären neue Buden notwendig.",q28:"Auf bestehendem Friedhof.",q29:null,q30:null,q31:"Im Rahmen der finanziellen Möglichkeiten.",q32:"Im Rahmen der finanziellen Möglichkeiten.",q33:null,q34:"Sanierung/Betrieb durch Investor.",q35:null,q36:"Prüfung, ob in den Wintermonaten mehr Parkplätze angeboten werden können."},
   },
   {
     id:"fw", name:"Freie Wähler", farbe:"#FF6000", teilnehmend:true,
     antworten:{q1:"ja",q2:"nein",q3:"nein",q4:"ja",q5:"nein",q6:"nein",q7:"ja",q8:"nein",q9:"ja",q10:"ja",q11:"neutral",q12:"nein",q13:"nein",q14:"ja",q15:"nein",q16:"ja",q17:"ja",q18:"ja",q19:"nein",q20:"nein",q21:"ja",q22:"ja",q23:"nein",q24:"ja",q25:"nein",q26:"ja",q27:"ja",q28:"ja",q29:"ja",q30:"nein",q31:"nein",q32:"ja",q33:"neutral",q34:"nein",q35:"ja",q36:"nein"},
-    begruendungen:{q1:"Wir möchten eine temporäre Fußgängerzone im Bereich Herrnstraße / Stadtplatz errichten. Zur Belebung der Innenstadt dann auch Marktstände und Veranstaltungen in diesem Bereich.",q2:"Eine Einweg-Regelung löst das Problem der sogenannten Eltern-Taxis nicht.",q3:null,q4:"Im Innenstadtbereich besteht ein Parksuchverkehr. Durch Einführung einer digitalen Lösung wollen wir diesen reduzieren.",q5:null,q6:null,q7:"Wir wollen die auswärtigen Kunden, die in Moosburg einkaufen oder was zu erledigen haben in unserer Stadt haben. Es gilt den Ortsdurchgangsverkehr zu reduzieren.",q8:"Wir wollen nicht mehr Verkehr Nachts und am Wochenende. Die Frage ist vermutlich missverständlich.",q9:"Wir wollen einen Live-Bürgerservice etablieren.",q10:null,q11:null,q12:"Durch Infrastrukturmaßnahmen Innenstadt schöner machen, einzelne Parkplätze verlagern.",q13:"Baugebiet ja oder nein hat direkte Auswirkung. Angebot und Nachfrage haben Auswirkungen auf die Preise am Wohnungsmarkt. Weiterhin aber auch Auswirkungen auf Infrastruktur.",q14:null,q15:null,q16:null,q17:null,q18:null,q19:"Die Frage würde sich dann stellen, wenn Gewerbegebiete vorhanden sind.",q20:null,q21:null,q22:"Um keine Einrichtungen schließen zu müssen, sollten die Gebühren regelmäßig, also alle 2-3 Jahre, orientiert an der Inflationsrate erhöht werden.",q23:null,q24:null,q25:null,q26:null,q27:null,q28:null,q29:null,q30:null,q31:null,q32:"Unter Verantwortung und Trägerschaft eines Vereins.",q33:null,q34:null,q35:null,q36:null},
+    begruendungen:{q1:"Wir möchten eine temporäre Fußgängerzone im Bereich Herrnstraße / Stadtplatz errichten. Zur Belebung der Innenstadt dann auch Marktstände und Veranstaltungen in diesem Bereich.",q2:"Eine Einweg-Regelung löst das Problem der sogenannten Eltern-Taxis nicht.",q3:null,q4:"Im Innenstadtbereich besteht ein Parksuchverkehr. Durch Einführung einer digitalen Lösung wollen wir diesen reduzieren.",q5:null,q6:null,q7:"Wir wollen die auswärtigen Kunden, die in Moosburg einkaufen oder was zu erledigen haben, in unserer Stadt haben. Es gilt den Ortsdurchgangsverkehr zu reduzieren.",q8:"Wir wollen nicht mehr Verkehr nachts und am Wochenende. Die Frage ist vermutlich missverständlich.",q9:"Wir wollen einen Live-Bürgerservice etablieren.",q10:null,q11:null,q12:"Durch Infrastrukturmaßnahmen Innenstadt schöner machen, einzelne Parkplätze verlagern.",q13:"Baugebiet ja oder nein hat direkte Auswirkung. Angebot und Nachfrage haben Auswirkungen auf die Preise am Wohnungsmarkt. Weiterhin aber auch Auswirkungen auf Infrastruktur.",q14:null,q15:null,q16:null,q17:null,q18:null,q19:"Die Frage würde sich dann stellen, wenn Gewerbegebiete vorhanden sind.",q20:null,q21:null,q22:"Um keine Einrichtungen schließen zu müssen, sollten die Gebühren regelmäßig, also alle 2–3 Jahre, orientiert an der Inflationsrate erhöht werden.",q23:null,q24:null,q25:null,q26:null,q27:null,q28:null,q29:null,q30:null,q31:null,q32:"Unter Verantwortung und Trägerschaft eines Vereins.",q33:null,q34:null,q35:null,q36:null},
   },
   {
     id:"afd", name:"AfD", farbe:"#009EE0", teilnehmend:false,
@@ -210,39 +165,6 @@ const ANT_CFG={
   skip:  {sym:"·",farbe:"#AAA",   hell:"#F5F5F5",label:"Übersprungen"},
 };
 
-const GLOBAL_CSS=`
-  @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap');
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-  @keyframes barGrow{from{width:0}to{}}
-  @keyframes scaleIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
-  @keyframes expandIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-  .fu{animation:fadeUp 0.55s ease both}
-  .fu1{animation-delay:.08s}.fu2{animation-delay:.20s}.fu3{animation-delay:.33s}.fu4{animation-delay:.46s}.fu5{animation-delay:.58s}
-  .btn-primary{transition:background .18s,transform .15s,box-shadow .18s}
-  .btn-primary:hover{background:#8B0D17!important;transform:translateY(-2px);box-shadow:0 8px 24px rgba(140,13,23,.3)!important}
-  .btn-primary:active{transform:translateY(0)!important}
-  .btn-ghost{transition:background .15s}
-  .btn-ghost:hover{background:#E2DDD4!important}
-  .btn-answer{transition:transform .12s,box-shadow .12s;cursor:pointer}
-  .btn-answer:hover{transform:translateY(-3px)!important}
-  .btn-answer:active{transform:translateY(0)!important}
-  .gewicht-item{transition:background .15s,border-color .15s;cursor:pointer}
-  .gewicht-item:hover{background:#F0EDE4!important}
-  .ergebnis-karte{animation:fadeUp .45s ease both}
-  .karte-header{cursor:pointer;user-select:none;transition:background .15s}
-  .karte-header:hover{background:#FAFAF7!important}
-  .bar-fill{animation:barGrow 1s cubic-bezier(.22,.68,0,1.2) both}
-  .overlay{animation:fadeIn .2s ease}
-  .popup-modal{animation:scaleIn .25s ease}
-  .expand-panel{animation:expandIn .25s ease both}
-  .detail-row:not(:last-child){border-bottom:1px solid #EDE9DF}
-  ::-webkit-scrollbar{width:5px}
-  ::-webkit-scrollbar-track{background:#EDE9DF;border-radius:99px}
-  ::-webkit-scrollbar-thumb{background:#C8B89A;border-radius:99px}
-`;
-
 // ─── COMPONENTS ───────────────────────────────────────────────────────────────
 
 function AntwortIcon({antwort,size=26}){
@@ -262,7 +184,6 @@ function DetailPanel({partei,nutzerAntworten}){
   );
   return(
     <div className="expand-panel" style={{borderTop:"1.5px solid #EDE9DF"}}>
-      {/* Legende */}
       <div style={{display:"flex",gap:18,padding:"9px 18px",background:"#F7F5F0",borderBottom:"1px solid #EDE9DF",justifyContent:"flex-end"}}>
         <div style={{display:"flex",alignItems:"center",gap:6}}>
           <div style={{width:9,height:9,borderRadius:"50%",background:partei.farbe,flexShrink:0}}/>
@@ -273,7 +194,6 @@ function DetailPanel({partei,nutzerAntworten}){
           <span style={{fontSize:".75rem",color:"#555",fontFamily:SF}}>Deine Antwort</span>
         </div>
       </div>
-      {/* Fragen */}
       {geordnet.map(frage=>{
         const pa=partei.antworten[frage.id],na=nutzerAntworten[frage.id];
         const beg=partei.begruendungen?.[frage.id];
@@ -348,7 +268,7 @@ function WelcomeScreen({onStart,onInfo}){
         <h1 className="fu fu2" style={{fontFamily:HF,fontSize:"clamp(2.4rem,8vw,3.6rem)",color:ROT,textAlign:"center",lineHeight:1.15,letterSpacing:"-.02em"}}>Wahl<span style={{color:GOLD}}>Kompass</span></h1>
         <p className="fu fu3" style={{color:"#444",fontSize:"1.05rem",textAlign:"center",lineHeight:1.65}}>Kommunalwahl Moosburg · Finde heraus, welche Partei<br/>deinen Ansichten am nächsten steht.</p>
         <div className="fu fu3" style={{display:"flex",gap:14,flexWrap:"wrap",justifyContent:"center"}}>
-          {[["36","Fragen"],["7","Parteien"],["~10","Minuten"]].map(([z,l])=>(
+          {[["36","Fragen"],["6","Parteien"],["~10","Minuten"]].map(([z,l])=>(
             <div key={l} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2,background:"#fff",border:"1.5px solid #E5E0D5",borderRadius:12,padding:"14px 22px",minWidth:90}}>
               <span style={{fontFamily:HF,fontSize:"1.8rem",color:ROT,fontWeight:700}}>{z}</span>
               <span style={{fontSize:".78rem",color:"#777",textTransform:"uppercase",letterSpacing:".07em"}}>{l}</span>
@@ -507,7 +427,6 @@ function App(){
 
   return(
     <>
-      <style>{GLOBAL_CSS}</style>
       {popup&&<InfoPopup onClose={()=>setPopup(false)}/>}
       {screen==="welcome"    &&<WelcomeScreen onStart={()=>setScreen("quiz")} onInfo={()=>setPopup(true)}/>}
       {screen==="quiz"       &&<QuizScreen frage={frage} idx={idx} gesamt={gesamt} onAntwort={gibAntwort} aktAntwort={antworten[frage?.id]} onZurueck={()=>idx>0&&setIdx(i=>i-1)}/>}
@@ -517,8 +436,7 @@ function App(){
   );
 }
 
-
-  ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>
