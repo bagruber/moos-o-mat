@@ -1,5 +1,10 @@
 # WahlKompass Moosburg 🗳️
 
+> **Archived.** The 2026 local election is over and the answers are frozen.
+> The tool stays online at
+> [bagruber.github.io/moos-o-mat](https://bagruber.github.io/moos-o-mat/).
+
+
 A small voting advice tool for the 2026 local elections in Moosburg a.d. Isar, Bavaria. Think Wahl-O-Mat, but local.
 
 ## What is this?
