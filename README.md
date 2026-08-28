@@ -1,4 +1,4 @@
-# WahlKompass Moosburg 🗳️
+# Moos-O-Mat 🗳️
 
 > **Archived.** The 2026 local election is over and the answers are frozen.
 > The tool stays online at
@@ -24,7 +24,24 @@ Everything runs locally in your browser. No data is collected, no backend, no co
 
 ## Tech
 
-A single self-contained `index.html` file. React via CDN, Babel in the browser. No build step, no dependencies to install — just open the file or deploy it to GitHub Pages as-is.
+```bash
+pnpm install
+pnpm dev
+pnpm build     # writes dist/index.html
+```
+
+The build still produces **one self-contained file** — that part hasn't changed, only how it gets there. `vite-plugin-singlefile` inlines the JS, the CSS and the three woff2 subsets as `data:` URIs, so the archived page makes no external requests at all. Nothing to go missing from someone else's CDN in a few years. `base: "./"` keeps the paths relative, so the same build serves from `/moos-o-mat/` on GitHub Pages and `/archiv/moos-o-mat/` on moosburg.eu.
+
+| File | Role |
+|---|---|
+| `src/daten.js` | Questions, party answers, explanations. Frozen. |
+| `src/app.jsx` | UI and scoring. |
+| `src/index.css` | Design tokens, fonts, animations. |
+| `src/fonts/` | Latin subsets of Playfair Display and Inter. |
+
+Colours, fonts and radii come from [`moosburg-design`](https://github.com/bagruber/moosburg-design) as a dependency. Two deliberate deviations, both commented in the code: no Tailwind (the UI uses React style objects, so `css/tokens.css` is imported instead of the Tailwind theme), and fonts vendored locally rather than via `@fontsource` (Inter's variable package has no latin-only entry point, so `wght.css` would have dragged Cyrillic, Greek and Vietnamese into the single file). The nine topic colours are darkened against the rainbow stripe — `rb-3`, `rb-4` and `rb-6` are area colours and don't reach 4.5:1 as a small kicker. Every pair in use is checked against WCAG 2.1 AA.
+
+Deployment runs through GitHub Actions on push to `main`, with *Settings → Pages* set to **GitHub Actions**. Note that this repository is archived, and archived repositories don't run workflows — so the workflow sits idle by design. Rebuilding means unarchiving, pushing, waiting for the deploy to finish, and archiving again.
 
 ## Participating parties
 

@@ -1,0 +1,103 @@
+/* Die Farb-, Schrift- und Radius-Tokens kommen aus dem Kanon-Repo. Der flache
+   :root-Satz statt des Tailwind-@theme, weil dieses Projekt kein Tailwind
+   einsetzt: die Oberflaeche arbeitet mit React-Style-Objekten, ein
+   Utility-Framework haette hier keine Aufgabe. */
+@import "moosburg-design/css/tokens.css";
+
+/* Playfair und Inter liegen als Latin-Subsets im Repo statt als
+   @fontsource-Pakete. Grund: der Build inlined die Schriften in die eine
+   HTML-Datei, und das Variable-Paket von Inter hat keinen Latin-Einstieg —
+   ueber wght.css waeren Kyrillisch, Griechisch und Vietnamesisch
+   mitgewandert. Die Dateien sind die aus moosburg-design/fonts. */
+@font-face {
+  font-family: "Playfair Display";
+  src: url("./fonts/playfair-display-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Playfair Display";
+  src: url("./fonts/playfair-display-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter Variable";
+  src: url("./fonts/inter-latin-wght-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; }
+
+/* Formularelemente erben Schrift nicht von selbst. Die Regel hier ersetzt das
+   fontFamily, das vorher in jedem einzelnen Button-Style-Objekt stand. */
+button { font: inherit; }
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-cream);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* Die Signatur der Moosburg-Projekte: neun feste Segmente, 4 px, nie als
+   Verlauf, nie umsortiert. */
+.wk-stripe { display: flex; height: 4px; flex-shrink: 0; }
+.wk-stripe > span { flex: 1; }
+.wk-stripe > span:nth-child(1) { background: var(--color-rb-1); }
+.wk-stripe > span:nth-child(2) { background: var(--color-rb-2); }
+.wk-stripe > span:nth-child(3) { background: var(--color-rb-3); }
+.wk-stripe > span:nth-child(4) { background: var(--color-rb-4); }
+.wk-stripe > span:nth-child(5) { background: var(--color-rb-5); }
+.wk-stripe > span:nth-child(6) { background: var(--color-rb-6); }
+.wk-stripe > span:nth-child(7) { background: var(--color-rb-7); }
+.wk-stripe > span:nth-child(8) { background: var(--color-rb-8); }
+.wk-stripe > span:nth-child(9) { background: var(--color-rb-9); }
+
+@keyframes wkFadeUp { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: none } }
+@keyframes wkBarGrow { from { width: 0 } }
+@keyframes wkExpand { from { opacity: 0; transform: translateY(-5px) } to { opacity: 1; transform: none } }
+@keyframes wkScaleIn { from { opacity: 0; transform: scale(.97) } to { opacity: 1; transform: none } }
+
+.wk-fu { animation: wkFadeUp .45s ease both }
+.wk-fu1 { animation-delay: .05s } .wk-fu2 { animation-delay: .13s }
+.wk-fu3 { animation-delay: .23s } .wk-fu4 { animation-delay: .33s }
+.wk-fu5 { animation-delay: .43s }
+.wk-bar { animation: wkBarGrow .9s cubic-bezier(.22,.68,0,1.1) both }
+.wk-expand { animation: wkExpand .2s ease both }
+.wk-modal { animation: wkScaleIn .2s ease }
+.wk-karte { animation: wkFadeUp .35s ease both }
+
+.wk-ans { transition: transform .1s, box-shadow .1s; cursor: pointer }
+.wk-ans:hover { transform: translateY(-2px) }
+.wk-ans:active { transform: none }
+.wk-hdr { cursor: pointer; user-select: none; transition: background .15s }
+.wk-hdr:hover { background: var(--color-cream) }
+.wk-row:not(:last-child) { border-bottom: 1px solid var(--color-ink-line) }
+.wk-ghost:hover { background: var(--color-ink-line) }
+.wk-prim:hover { background: var(--color-red-700); transform: translateY(-1px) }
+.wk-gwt:hover { background: var(--color-cream-dark) }
+
+:where(a, button, [role="button"]):focus-visible {
+  outline: 2px solid var(--color-red-500);
+  outline-offset: 2px;
+}
+
+/* Wer Bewegung abbestellt hat, bekommt die Zustaende ohne den Weg dorthin. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+::-webkit-scrollbar { width: 5px }
+::-webkit-scrollbar-track { background: var(--color-cream-dark) }
+::-webkit-scrollbar-thumb { background: var(--color-gold-200); border-radius: 99px }
