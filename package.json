@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "lucide-react": "^1.16.0",
     "moosburg-design": "github:bagruber/moosburg-design",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"

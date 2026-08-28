@@ -1,4 +1,4 @@
-# Moos-O-Mat 🗳️
+# Moos-O-Mat
 
 > **Archived.** The 2026 local election is over and the answers are frozen.
 > The tool stays online at

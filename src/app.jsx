@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
+import { Archive, ChevronDown, Info, RotateCcw, Scale, X } from "lucide-react";
 import { FRAGEN, PARTEIEN } from "./daten.js";
 
 function berechneMatch(partei, nutzerAntworten, doppelt) {
@@ -54,9 +55,109 @@ function Stripe(){
   return <div className="wk-stripe" aria-hidden="true">{Array.from({length:9},(_,i)=><span key={i}/>)}</div>;
 }
 
+// Nähe zweier Parteien auf derselben Skala wie das eigene Ergebnis: gleiche
+// Antwort zwei Punkte, einer neutral einen, gegensätzlich keinen.
+function naeheProzent(a,b){
+  let punkte=0,max=0;
+  for(const f of FRAGEN){
+    const x=a.antworten[f.id],y=b.antworten[f.id];
+    if(x==null||y==null) continue;
+    max+=2;
+    if(x===y) punkte+=2;
+    else if(x==="neutral"||y==="neutral") punkte+=1;
+  }
+  return max===0?null:Math.round((punkte/max)*100);
+}
+
+const KURZ={csu:"CSU",fw:"Freie Wähler",gruene:"Grüne",spd:"SPD",fresh:"FRESH",linke:"Linke"};
+
+// Kein Kräftemodell wie im council-Tool: dort ist der Graph dünn, hier ist er
+// vollständig — fünfzehn Kanten zwischen sechs Knoten, alle positiv. Abstoßung
+// gegen Anziehung ergäbe dabei einen Klumpen. Stattdessen bekommt jedes Paar
+// eine Soll-Länge aus seiner Unähnlichkeit, und die Schleife verkleinert die
+// Abweichung davon. Startpositionen auf dem Kreis, feste Rundenzahl, kein
+// Zufall: dasselbe Bild bei jedem Aufruf.
+function netzLayout(parteien,paare,W,H,rand){
+  const n=parteien.length;
+  const pos=parteien.map((_,i)=>{
+    const a=2*Math.PI*i/n-Math.PI/2;
+    return {x:W/2+Math.cos(a)*W*.3,y:H/2+Math.sin(a)*H*.3};
+  });
+  const idx=Object.fromEntries(parteien.map((p,i)=>[p.id,i]));
+  const werte=paare.map(p=>p.pct);
+  const min=Math.min(...werte),max=Math.max(...werte);
+  const soll=paare.map(p=>{
+    const t=max===min?.5:(p.pct-min)/(max-min);
+    return {i:idx[p.a.id],j:idx[p.b.id],l:130-t*85};
+  });
+  for(let runde=0;runde<400;runde++){
+    for(const {i,j,l} of soll){
+      const dx=pos[j].x-pos[i].x,dy=pos[j].y-pos[i].y;
+      const d=Math.hypot(dx,dy)||.01;
+      const k=((d-l)/d)*.12;
+      pos[i].x+=dx*k; pos[i].y+=dy*k;
+      pos[j].x-=dx*k; pos[j].y-=dy*k;
+    }
+  }
+  const xs=pos.map(p=>p.x),ys=pos.map(p=>p.y);
+  const bx=Math.min(...xs),by=Math.min(...ys);
+  const bw=Math.max(...xs)-bx||1,bh=Math.max(...ys)-by||1;
+  const s=Math.min((W-rand*2)/bw,(H-rand*2)/bh);
+  return pos.map(p=>({
+    x:rand+(p.x-bx)*s+((W-rand*2)-bw*s)/2,
+    y:rand+(p.y-by)*s+((H-rand*2)-bh*s)/2,
+  }));
+}
+
+function NaeheNetz(){
+  const {parteien,paare,pos,min,max}=useMemo(()=>{
+    const parteien=PARTEIEN.filter(p=>p.teilnehmend);
+    const paare=[];
+    for(let i=0;i<parteien.length;i++)
+      for(let j=i+1;j<parteien.length;j++)
+        paare.push({a:parteien[i],b:parteien[j],pct:naeheProzent(parteien[i],parteien[j])});
+    const werte=paare.map(p=>p.pct);
+    return {parteien,paare,pos:netzLayout(parteien,paare,300,190,34),
+            min:Math.min(...werte),max:Math.max(...werte)};
+  },[]);
+  const idx=Object.fromEntries(parteien.map((p,i)=>[p.id,i]));
+
+  return(
+    <div>
+      <p style={{fontSize:".75rem",color:LEISE,fontWeight:700,textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>Wie nah sich die Parteien stehen</p>
+      <svg viewBox="0 0 300 190" style={{width:"100%",height:"auto",display:"block"}} role="img"
+           aria-label={`Nähe-Netz der ${parteien.length} teilnehmenden Parteien, Übereinstimmung zwischen ${min} und ${max} Prozent`}>
+        {/* Schwache Kanten zuerst, damit die starken oben liegen. */}
+        {paare.slice().sort((p,q)=>p.pct-q.pct).map(p=>{
+          const t=max===min?1:(p.pct-min)/(max-min);
+          const A=pos[idx[p.a.id]],B=pos[idx[p.b.id]];
+          return <line key={p.a.id+p.b.id} x1={A.x} y1={A.y} x2={B.x} y2={B.y}
+                       stroke="var(--color-ink)" strokeOpacity={(.05+t*t*.42).toFixed(3)}
+                       strokeWidth={(.5+t*2).toFixed(2)}/>;
+        })}
+        {parteien.map((p,i)=>(
+          <g key={p.id}>
+            <circle cx={pos[i].x} cy={pos[i].y} r="6" fill={p.farbe}/>
+            <text x={pos[i].x} y={pos[i].y-11} textAnchor="middle"
+                  style={{fontSize:"9px",fontWeight:700,fill:"var(--color-ink)"}}>{KURZ[p.id]||p.name}</text>
+          </g>
+        ))}
+      </svg>
+      <p style={{fontSize:".78rem",color:"var(--color-ink-soft)",lineHeight:1.6,marginTop:6}}>
+        Kurze, kräftige Linien heißen: die beiden haben oft gleich geantwortet. Die
+        Übereinstimmung reicht von {min}{" "}% bis {max}{" "}% — keine zwei
+        Parteien lagen also grundsätzlich auseinander. Gerechnet über die{" "}
+        {FRAGEN.length} Fragen dieses Werkzeugs, nicht über das Abstimmungsverhalten
+        im Stadtrat.
+      </p>
+    </div>
+  );
+}
+
 function ArchivHinweis({kompakt}){
   return(
-    <div style={{background:"var(--color-gold-100)",border:`1px solid var(--color-gold-200)`,borderRadius:"var(--radius-lg)",padding:kompakt?"9px 13px":"11px 15px"}}>
+    <div style={{background:"var(--color-gold-100)",border:`1px solid var(--color-gold-200)`,borderRadius:"var(--radius-lg)",padding:kompakt?"9px 13px":"11px 15px",display:"flex",gap:9,alignItems:"flex-start"}}>
+      <Archive size={15} strokeWidth={2} aria-hidden="true" style={{color:"var(--color-gold-700)",flexShrink:0,marginTop:2}}/>
       <p style={{fontSize:".82rem",color:"var(--color-gold-700)",lineHeight:1.6}}>
         <strong>Archiv.</strong> Die Kommunalwahl 2026 ist entschieden. Die Antworten stehen auf
         dem Stand des Wahltags und werden nicht mehr gepflegt.
@@ -139,7 +240,7 @@ function InfoPopup({onClose}){
         <div style={{padding:"22px 24px 26px"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:14}}>
             <h2 style={{fontFamily:"var(--font-display)",color:ROT,fontSize:"var(--text-display-4)"}}>Über dieses Projekt</h2>
-            <button onClick={onClose} aria-label="Schließen" style={{background:"none",border:"none",fontSize:"1.5rem",cursor:"pointer",color:LEISE,lineHeight:1,padding:0}}>×</button>
+            <button onClick={onClose} aria-label="Schließen" style={{background:"none",border:"none",cursor:"pointer",color:LEISE,lineHeight:0,padding:2}}><X size={20} strokeWidth={2}/></button>
           </div>
           <p style={{fontSize:".9rem",color:"var(--color-ink-soft)",lineHeight:1.7,marginBottom:14}}>Der <strong>Moos-O-Mat</strong> ist ein überparteiliches und ehrenamtliches Projekt zur Kommunalwahl in Moosburg a.d. Isar.</p>
           <div style={{marginBottom:14}}><ArchivHinweis kompakt/></div>
@@ -147,6 +248,7 @@ function InfoPopup({onClose}){
             <p style={{fontSize:".85rem",color:INK,fontWeight:700,marginBottom:4}}>Keine Wahlempfehlung</p>
             <p style={{fontSize:".82rem",color:"var(--color-ink-soft)",lineHeight:1.62}}>Dieses Tool stellt ausdrücklich <strong>keine Wahlempfehlung</strong> dar. Für die Inhalte der Parteiantworten sind ausschließlich die jeweiligen Parteien selbst verantwortlich.</p>
           </div>
+          <div style={{marginBottom:18}}><NaeheNetz/></div>
           <p style={{fontSize:".75rem",color:LEISE,fontWeight:700,textTransform:"uppercase",letterSpacing:".07em",marginBottom:9}}>Ehrenamtlich beteiligt</p>
           <div style={{display:"flex",flexDirection:"column",gap:6,marginBottom:20}}>
             {[["Benedict Aria Gruber","Digitalisierungsreferent, StR · FRESH"],["Philipp Fincke","StR · FDP / parteilos"],["Kilian Linz","StR · Grüne"],["Stefan John","StR a.D. · Linke"]].map(([n,r])=>(
@@ -183,7 +285,7 @@ function WelcomeScreen({onStart,onInfo}){
           <p style={{color:"var(--color-ink-soft)",fontSize:".9rem",lineHeight:1.68,textAlign:"center"}}>Fragen in <strong>zufälliger Reihenfolge</strong>. Antworte mit <strong>Ja</strong>, <strong>Neutral</strong> oder <strong>Nein</strong>, oder überspringe. Am Ende kannst du Themen <strong>doppelt gewichten</strong>.</p>
         </div>
         <button className="wk-fu wk-fu4 wk-prim" onClick={onStart} style={{background:ROT,color:"#fff",border:"none",borderRadius:"var(--radius-xl)",padding:"14px 36px",fontSize:"1rem",fontWeight:700,cursor:"pointer",transition:"background .18s,transform .18s"}}>Jetzt starten →</button>
-        <button className="wk-fu wk-fu5 wk-ghost" onClick={onInfo} style={{background:"transparent",border:`1px solid ${LINIE}`,borderRadius:99,padding:"6px 18px",fontSize:".82rem",color:"var(--color-ink-soft)",cursor:"pointer",transition:"background .15s"}}>Über dieses Projekt</button>
+        <button className="wk-fu wk-fu5 wk-ghost" onClick={onInfo} style={{display:"flex",alignItems:"center",gap:7,background:"transparent",border:`1px solid ${LINIE}`,borderRadius:99,padding:"6px 18px",fontSize:".82rem",color:"var(--color-ink-soft)",cursor:"pointer",transition:"background .15s"}}><Info size={14} strokeWidth={2} aria-hidden="true"/>Über dieses Projekt</button>
         <p className="wk-fu wk-fu5" style={{fontSize:".75rem",color:LEISE,textAlign:"center"}}>Keine Daten werden gespeichert · Alles läuft lokal in deinem Browser</p>
       </div>
     </div>
@@ -239,7 +341,7 @@ function GewichtungScreen({fragen,doppelt,onToggle,onWeiter,onZurueck,beantw}){
       <div style={{maxWidth:580,width:"100%",display:"flex",flexDirection:"column",gap:14}}>
         <h2 style={{fontFamily:"var(--font-display)",fontSize:"clamp(1.5rem,5vw,var(--text-display-3))",color:ROT,letterSpacing:"-.02em"}}>Doppelte Gewichtung</h2>
         <p style={{color:"var(--color-ink-soft)",fontSize:".92rem",lineHeight:1.62}}>Du hast <strong>{beantw} Fragen</strong> beantwortet. Wähle Fragen, die dir besonders wichtig sind — sie fließen <strong>doppelt</strong> ins Ergebnis ein.</p>
-        {doppelt.size>0&&<div style={{background:"var(--color-gold-100)",border:`1px solid var(--color-gold-200)`,borderRadius:"var(--radius-lg)",padding:"9px 14px",fontSize:".87rem",color:"var(--color-gold-700)"}}><strong>{doppelt.size}</strong> {doppelt.size===1?"Frage":"Fragen"} doppelt gewichtet</div>}
+        {doppelt.size>0&&<div style={{background:"var(--color-gold-100)",border:`1px solid var(--color-gold-200)`,borderRadius:"var(--radius-lg)",padding:"9px 14px",fontSize:".87rem",color:"var(--color-gold-700)",display:"flex",alignItems:"center",gap:8}}><Scale size={15} strokeWidth={2} aria-hidden="true" style={{flexShrink:0}}/><span><strong>{doppelt.size}</strong> {doppelt.size===1?"Frage":"Fragen"} doppelt gewichtet</span></div>}
         <div style={{display:"flex",flexDirection:"column",gap:7,maxHeight:"46vh",overflowY:"auto",paddingRight:3}}>
           {fragen.map(f=>{
             const aktiv=doppelt.has(f.id),kc=KAT_FARBEN[f.kategorie]||ROT;
@@ -285,7 +387,7 @@ function ErgebnisseScreen({ergebnisse,nutzerAntworten,onNeustart,doppeltAnz,bean
                   </div>
                   <div style={{display:"flex",alignItems:"center",gap:9}}>
                     {p.match!==null?<span style={{fontFamily:"var(--font-display)",fontSize:"1.3rem",fontWeight:700,color:INK}}>{p.match} %</span>:<span style={{color:LEISE,fontSize:"1.1rem",fontFamily:"var(--font-display)"}}>–</span>}
-                    {p.teilnehmend&&<span aria-hidden="true" style={{color:LEISE,fontSize:".9rem",display:"inline-block",transform:isOpen?"rotate(180deg)":"none",transition:"transform .25s"}}>▾</span>}
+                    {p.teilnehmend&&<ChevronDown size={16} strokeWidth={2} aria-hidden="true" style={{color:LEISE,flexShrink:0,transform:isOpen?"rotate(180deg)":"none",transition:"transform .25s"}}/>}
                   </div>
                 </div>
                 <div style={{height:7,background:"var(--color-cream-dark)",borderRadius:99,overflow:"hidden",marginBottom:5}}>
@@ -299,7 +401,7 @@ function ErgebnisseScreen({ergebnisse,nutzerAntworten,onNeustart,doppeltAnz,bean
           );
         })}
         <div style={{display:"flex",justifyContent:"center",marginTop:4}}>
-          <button className="wk-prim" onClick={onNeustart} style={{background:ROT,color:"#fff",border:"none",borderRadius:"var(--radius-xl)",padding:"12px 30px",fontSize:".97rem",fontWeight:700,cursor:"pointer",transition:"background .18s,transform .18s"}}>Neu starten</button>
+          <button className="wk-prim" onClick={onNeustart} style={{display:"flex",alignItems:"center",gap:8,background:ROT,color:"#fff",border:"none",borderRadius:"var(--radius-xl)",padding:"12px 30px",fontSize:".97rem",fontWeight:700,cursor:"pointer",transition:"background .18s,transform .18s"}}><RotateCcw size={16} strokeWidth={2.2} aria-hidden="true"/>Neu starten</button>
         </div>
         <p style={{fontSize:".75rem",color:LEISE,textAlign:"center",paddingBottom:6}}>Überparteiliches, ehrenamtliches Informationsprojekt · Keine Wahlempfehlung</p>
       </div>
